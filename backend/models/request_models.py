@@ -15,7 +15,6 @@ class AnalyzeRequest(BaseModel):
 class AnalyzeResponse(BaseModel):
     prediction: Literal["fake", "real"]
     confidence: float = Field(..., ge=0.0, le=1.0)
-    fake_probability: float = Field(..., ge=0.0, le=1.0)
     evidence: list[dict[str, str | float]]
     explanation: str
     image_analysis: dict[str, bool | float]
