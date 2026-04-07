@@ -1,4 +1,7 @@
 fastapi
+pydantic
+sentence-transformers
+numpy
 uvicorn
 scikit-learn
 pandas
