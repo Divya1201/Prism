@@ -6,3 +6,7 @@ pillow
 numpy
 torch
 transformers
+sentence-transformers
+scikit-learn
+pandas
+joblib
