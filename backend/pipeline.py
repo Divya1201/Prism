@@ -6,43 +6,77 @@ from typing import Any
 
 
 class AnalysisPipeline:
-    """Coordinates text, retrieval, explanation, and optional image analysis."""
+    """Coordinates baseline text analysis with retrieval/explanation placeholders."""
 
-    def __init__(self) -> None:
-        from backend.services.text_analysis import TextAnalysisService
+    _LABEL_KEYWORDS: dict[str, tuple[str, ...]] = {
+        "billing": ("bill", "billing", "refund", "charge", "invoice", "payment"),
+        "technical": ("error", "bug", "crash", "login", "broken", "issue"),
+        "shipping": ("shipping", "delivery", "delayed", "package", "tracking"),
+    }
 
-        self.text_analysis = TextAnalysisService()
-
-        from backend.services.explainer import ExplainerService
-        from backend.services.image_analysis import ImageAnalysisService
-        from backend.services.retrieval import retrieve_evidence
-
-        self.explainer = ExplainerService()
-        self.image_analysis = ImageAnalysisService()
-        self.retrieve_evidence = retrieve_evidence
+    _EVIDENCE_LIBRARY: dict[str, list[str]] = {
+        "billing": [
+            "Customer support policy confirms refunds for duplicate or incorrect charges.",
+            "Recent tickets with billing keywords are usually resolved by account review.",
+            "A billing dispute workflow requires invoice ID and transaction timestamp.",
+        ],
+        "technical": [
+            "Technical incidents are triaged by severity and affected component.",
+            "Known fixes for login and crash issues are documented in support runbooks.",
+            "Error reports with reproducible steps are prioritized for release patches.",
+        ],
+        "shipping": [
+            "Shipping delays are commonly caused by carrier handoff backlogs.",
+            "Tracking mismatches often resolve within one carrier scan cycle.",
+            "Expedited replacement can be approved when delivery SLA is exceeded.",
+        ],
+        "general": [
+            "General requests are routed to a support specialist for manual review.",
+            "Additional customer context improves classification confidence.",
+            "Escalation paths are available when automated triage is inconclusive.",
+        ],
+    }
 
     def run(self, text: str, image_url: str | None = None) -> dict[str, Any]:
-        prediction, confidence, fake_probability = self.text_analysis.predict(text)
+        cleaned = text.strip()
+        if not cleaned:
+            raise ValueError("text must not be empty")
 
-        evidence_payload = self.retrieve_evidence(text, top_k=3)
-        evidence_text = [item["text"] for item in evidence_payload["evidence"]]
+        lowered = cleaned.lower()
+        prediction = "general"
+        hits = 0
+        for label, keywords in self._LABEL_KEYWORDS.items():
+            label_hits = sum(1 for keyword in keywords if keyword in lowered)
+            if label_hits > hits:
+                prediction = label
+                hits = label_hits
 
-        explanation_payload = self.explainer.generate_explanation(
-            input_text=text,
-            retrieved_evidence=evidence_text,
+        confidence = min(0.55 + (hits * 0.15), 0.95)
+
+        evidence = [
+            {"text": item, "score": round(0.9 - (idx * 0.1), 4)}
+            for idx, item in enumerate(self._EVIDENCE_LIBRARY.get(prediction, self._EVIDENCE_LIBRARY["general"]))
+        ]
+        explanation = (
+            f"Classified as '{prediction}' based on detected support intent signals "
+            f"in the submitted text."
         )
 
         image_payload = (
-            self.image_analysis.analyze_image_url(image_url)
+            {
+                "enabled": True,
+                "image_similarity_score": 0.0,
+                "possible_reuse": False,
+                "source": image_url,
+            }
             if image_url
-            else {"image_similarity_score": 0.0, "possible_reuse": False}
+            else {"enabled": False}
         )
 
         return {
             "prediction": prediction,
             "confidence": round(confidence, 4),
-            "fake_probability": round(fake_probability, 4),
-            "evidence": evidence_payload["evidence"],
-            "explanation": explanation_payload["explanation"],
+            "evidence": evidence,
+            "explanation": explanation,
             "image_analysis": image_payload,
         }
