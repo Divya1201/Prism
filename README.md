@@ -1,30 +1,24 @@
 # Prism Repository Layout
 
-This repository previously contained multiple independent API entrypoints (`main.py`, `app.py`, and `app/main.py`) that implemented different `/analyze` behavior. That made local runs inconsistent.
+This repository currently uses a single backend entrypoint and a shared pipeline/services layout.
 
 ## Canonical backend
 
 Use the FastAPI app in:
 
-- `backend/app/main.py`
+- `backend/main.py`
 
 Run with:
 
 ```bash
-uvicorn backend.app.main:app --reload
+uvicorn backend.main:app --reload
 ```
 
-## Compatibility shims
+## Key directories
 
-The following legacy files now re-export the canonical app to avoid drift:
-
-- `main.py`
-- `app.py`
-- `app/main.py`
-
-## Other directories
-
-- `prism_pipeline/`: lightweight demo pipeline + unit tests
-- `services/`: model/pipeline support services used by legacy and scripts
-- `prism-ml/`: packaged variant maintained for compatibility
+- `backend/`: FastAPI app, request models, service modules, and pipeline integration
+- `prism_pipeline/`: lightweight demo pipeline package
+- `services/`: shared service implementations
+- `tests/`: unit tests for the pipeline package
 - `extension/`: browser extension assets
+- `scripts/`: utility scripts (for example, training helpers)
