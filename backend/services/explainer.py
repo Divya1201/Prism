@@ -1,61 +1,39 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Iterable
+from functools import lru_cache
+from typing import Iterable, Sequence
 
-import numpy as np
-from sentence_transformers import SentenceTransformer
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 
-
-@dataclass(frozen=True)
-class RetrievalResult:
-    text: str
-    score: float
+DEFAULT_MODEL_NAME = "google/flan-t5-base"
 
 
-class EvidenceRetriever:
-    def __init__(self, documents: Iterable[str] | None = None, model_name: str = "all-MiniLM-L6-v2") -> None:
-        self.documents = list(documents) if documents is not None else self._default_documents()
-        self.model = SentenceTransformer(model_name)
-        self._doc_embeddings = self._build_index(self.documents)
-
-    @staticmethod
-    def _default_documents() -> list[str]:
-        return [
-            "The Federal Reserve kept interest rates unchanged this week while signaling a cautious approach to future cuts as inflation remains above target.",
-            "A major technology company announced a new AI chip designed to reduce data-center energy use by up to 30 percent in large-scale inference workloads.",
-            "Global oil prices rose after supply disruptions in key shipping routes raised concerns about near-term inventory shortages.",
-            "A national health agency reported that seasonal flu cases declined for the third consecutive week following expanded vaccination campaigns.",
-            "Scientists published a study showing that urban tree canopies can lower summer surface temperatures by several degrees in densely populated neighborhoods.",
-            "The local transit authority approved a multi-year plan to modernize rail signaling systems and improve on-time performance across commuter lines.",
-        ]
-
-    @staticmethod
-    def _l2_normalize(matrix: np.ndarray) -> np.ndarray:
-        norms = np.linalg.norm(matrix, axis=1, keepdims=True)
-        norms[norms == 0] = 1.0
-        return matrix / norms
-
-    def _build_index(self, documents: list[str]) -> np.ndarray:
-        embeddings = self.model.encode(documents, convert_to_numpy=True)
-        return self._l2_normalize(embeddings.astype(np.float32))
-
-    def retrieve(self, query: str, top_k: int = 3) -> list[RetrievalResult]:
-        if not query.strip():
-            return []
-
-        query_embedding = self.model.encode([query], convert_to_numpy=True).astype(np.float32)
-        query_embedding = self._l2_normalize(query_embedding)[0]
-
-        scores = self._doc_embeddings @ query_embedding
-        top_indices = np.argsort(scores)[::-1][:top_k]
-
-        return [RetrievalResult(text=self.documents[i], score=float(scores[i])) for i in top_indices]
+@lru_cache(maxsize=1)
+def _build_generator(model_name: str = DEFAULT_MODEL_NAME):
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+    return pipeline("text2text-generation", model=model, tokenizer=tokenizer)
 
 
-retriever = EvidenceRetriever()
+class ExplainerService:
+    def __init__(self, model_name: str = DEFAULT_MODEL_NAME):
+        self._generator = _build_generator(model_name)
 
+    def generate_explanation(
+        self,
+        input_text: str,
+        retrieved_evidence: Sequence[str] | Iterable[str],
+        max_new_tokens: int = 128,
+    ) -> dict[str, str]:
+        evidence_lines = [f"- {line.strip()}" for line in retrieved_evidence if line and line.strip()]
+        evidence_block = "\n".join(evidence_lines) if evidence_lines else "- No evidence retrieved."
 
-def retrieve_evidence(query: str, top_k: int = 3) -> dict[str, list[dict[str, float | str]]]:
-    results = retriever.retrieve(query, top_k=top_k)
-    return {"evidence": [{"text": item.text, "score": round(item.score, 4)} for item in results]}
+        prompt = (
+            "Explain why this claim may be misleading using the following evidence:\n"
+            f"Claim: {input_text.strip()}\n"
+            f"Evidence:\n{evidence_block}"
+        )
+
+        result = self._generator(prompt, max_new_tokens=max_new_tokens, do_sample=False)
+        explanation = result[0]["generated_text"].strip()
+        return {"explanation": explanation}
