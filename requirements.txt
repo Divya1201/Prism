@@ -1,8 +1,12 @@
 fastapi
-pydantic
-sentence-transformers
-numpy
 uvicorn
+pydantic
+requests
+pillow
+numpy
+torch
+transformers
+sentence-transformers
 scikit-learn
 pandas
 joblib
