@@ -1,82 +1,65 @@
 """Core analysis pipeline orchestration."""
 
 from __future__ import annotations
-
 from typing import Any
 
+from services.text_analysis import analyze_text
+from services.retrieval import retrieve_evidence
+from services.explainer import ExplainerService
+from services.image_analysis import ImageAnalysisService
 
 class AnalysisPipeline:
     """Coordinates baseline text analysis with retrieval/explanation placeholders."""
+    def __init__(self):
+        self.explainer = ExplainerService()
+        self.image_service = ImageAnalysisService()
+        
+    def run(self, text: str, image_url: str | None = None):
 
-    _LABEL_KEYWORDS: dict[str, tuple[str, ...]] = {
-        "billing": ("bill", "billing", "refund", "charge", "invoice", "payment"),
-        "technical": ("error", "bug", "crash", "login", "broken", "issue"),
-        "shipping": ("shipping", "delivery", "delayed", "package", "tracking"),
-    }
-
-    _EVIDENCE_LIBRARY: dict[str, list[str]] = {
-        "billing": [
-            "Customer support policy confirms refunds for duplicate or incorrect charges.",
-            "Recent tickets with billing keywords are usually resolved by account review.",
-            "A billing dispute workflow requires invoice ID and transaction timestamp.",
-        ],
-        "technical": [
-            "Technical incidents are triaged by severity and affected component.",
-            "Known fixes for login and crash issues are documented in support runbooks.",
-            "Error reports with reproducible steps are prioritized for release patches.",
-        ],
-        "shipping": [
-            "Shipping delays are commonly caused by carrier handoff backlogs.",
-            "Tracking mismatches often resolve within one carrier scan cycle.",
-            "Expedited replacement can be approved when delivery SLA is exceeded.",
-        ],
-        "general": [
-            "General requests are routed to a support specialist for manual review.",
-            "Additional customer context improves classification confidence.",
-            "Escalation paths are available when automated triage is inconclusive.",
-        ],
-    }
-
-    def run(self, text: str, image_url: str | None = None) -> dict[str, Any]:
+        # 1. Validate input
         cleaned = text.strip()
         if not cleaned:
             raise ValueError("text must not be empty")
 
-        lowered = cleaned.lower()
-        prediction = "general"
-        hits = 0
-        for label, keywords in self._LABEL_KEYWORDS.items():
-            label_hits = sum(1 for keyword in keywords if keyword in lowered)
-            if label_hits > hits:
-                prediction = label
-                hits = label_hits
+        # 2. TEXT ANALYSIS (fake / real)
+        text_result = analyze_text(cleaned, image_url)
+        prediction = text_result["prediction"]
+        confidence = text_result["confidence"]
 
-        confidence = min(0.55 + (hits * 0.15), 0.95)
+        # 3. RETRIEVE EVIDENCE
+        retrieval_result = retrieve_evidence(cleaned)
+        evidence_list = retrieval_result["evidence"]
 
-        evidence = [
-            {"text": item, "score": round(0.9 - (idx * 0.1), 4)}
-            for idx, item in enumerate(self._EVIDENCE_LIBRARY.get(prediction, self._EVIDENCE_LIBRARY["general"]))
-        ]
-        explanation = (
-            f"Classified as '{prediction}' based on detected support intent signals "
-            f"in the submitted text."
-        )
+        # Extract only text for explainer
+        if not evidence_list:
+            evidence_list = [{"text": "No supporting evidence found.", "score": 0.0}]
+        evidence_texts = [item["text"] for item in evidence_list]
+            
+        # 4. GENERATE EXPLANATION (LLM)
+        try:
+            explanation_result = self.explainer.generate_explanation(
+                input_text=cleaned,
+                retrieved_evidence=evidence_texts
+            )
+            explanation = explanation_result.get("explanation", "No explanation generated.")
+        except Exception:
+            explanation = "Explanation generation failed. Showing retrieved evidence instead." 
 
-        image_payload = (
-            {
-                "enabled": True,
-                "image_similarity_score": 0.0,
-                "possible_reuse": False,
-                "source": image_url,
-            }
-            if image_url
-            else {"enabled": False}
-        )
+        # 5. IMAGE ANALYSIS (optional)
+        if image_url:
+            try:
+                image_analysis = self.image_service.analyze_image_url(image_url)
+                image_analysis["enabled"] = True
+            except Exception:
+                image_analysis = {"enabled": False, "error": "Image analysis failed"}
+        else:
+            image_analysis = {"enabled": False}
 
+        # 6. FINAL RESPONSE
         return {
             "prediction": prediction,
-            "confidence": round(confidence, 4),
-            "evidence": evidence,
+            "confidence": confidence,
+            "evidence": evidence_list,
             "explanation": explanation,
-            "image_analysis": image_payload,
+            "image_analysis": image_analysis,
         }
