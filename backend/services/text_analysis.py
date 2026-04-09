@@ -3,16 +3,29 @@
 from app.utils.preprocessing import preprocess_text
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
+from functools import lru_cache
+from pathlib import Path
 
 MODEL_PATH = "models/bert_model"
-#Safe loading
-try:
+# ---------------------------
+# LAZY LOAD MODEL 
+# ---------------------------
+@lru_cache(maxsize=1)
+def load_model():
+    if not Path(MODEL_PATH).exists():
+        raise RuntimeError(
+             "Model not found. Please train it using train_text_classifier.py"
+        )
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
     model.eval()
-except Exception:
-    tokenizer = None
-    model = None
+
+    return tokenizer, model
+
+# ---------------------------
+# DEVICE SETUP
+# ---------------------------
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 8 misinformation categories (aligned with README)
 CATEGORY_KEYWORDS = {
@@ -72,25 +85,29 @@ def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | flo
     # -------------------------
     # 1. BERT PREDICTION
     # -------------------------
-    if tokenizer is None or model is None:
+    try:
+        tokenizer, model = load_model()
+        model.to(DEVICE)
+
+        inputs = tokenizer(
+            processed_text,
+            return_tensors="pt",
+            truncation=True,
+            padding=True,
+        ).to(DEVICE)
+
+        with torch.no_grad():
+            outputs = model(**inputs)
+
+        probs = torch.nn.functional.softmax(outputs.logits, dim=1)
+        confidence, predicted_class = torch.max(probs, dim=1)
+
+        bert_prediction = model.config.id2label[predicted_class.item()]
+        bert_confidence = confidence.item()
+
+    except Exception:
         bert_prediction = None
         bert_confidence = 0.0
-    else:
-        try:
-            inputs = tokenizer(processed_text, return_tensors="pt", truncation=True, padding=True)
-
-            with torch.no_grad():
-                outputs = model(**inputs)
-
-            probs = torch.nn.functional.softmax(outputs.logits, dim=1)
-            confidence, predicted_class = torch.max(probs, dim=1)
-
-            bert_prediction = model.config.id2label[predicted_class.item()]
-            bert_confidence = confidence.item()
-
-        except Exception:
-            bert_prediction = None
-            bert_confidence = 0.0
 
     # -------------------------
     # 2. KEYWORD FALLBACK
@@ -106,14 +123,11 @@ def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | flo
     # -------------------------
     # 3. DECISION LOGIC
     # -------------------------
-
-    # If BERT is confident → trust it
-    if bert_confidence >= 0.6:
+    if bert_confidence >= 0.6 and bert_prediction:
         prediction = bert_prediction
         confidence = bert_confidence
         explanation = f"Predicted as '{prediction}' using trained BERT model."
 
-    # Else fallback to keyword logic
     else:
         if best_score == 0:
             prediction = "unknown"
@@ -122,9 +136,7 @@ def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | flo
         else:
             prediction = best_category
             confidence = min(0.5 + best_score * 0.15, 0.95)
-            explanation = (
-                f"Classified as '{prediction}' using keyword-based fallback."
-            )
+            explanation = f"Classified as '{prediction}' using keyword-based fallback."
 
     # -------------------------
     # 4. IMAGE ADJUSTMENT
@@ -134,6 +146,6 @@ def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | flo
 
     return {
         "prediction": prediction,
-        "confidence": round(min(confidence,0.99), 2),
+        "confidence": round(min(confidence, 0.99), 2),
         "explanation": explanation,
     }
