@@ -2,32 +2,72 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Iterable
-
+import requests
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-
+# DATA STRUCTURE
 @dataclass(frozen=True)
 class RetrievalResult:
     text: str
     score: float
 
+# -------------------------
+# WEB SEARCH FUNCTION
+# -------------------------
+def fetch_web_evidence(query: str, top_k: int = 5) -> List[str]:
+    """
+    Fetch real-world evidence using DuckDuckGo API
+    """
+    url = "https://api.duckduckgo.com/"
+    params = {
+        "q": query,
+        "format": "json",
+    }
 
+    try:
+        response = requests.get(url, params=params, timeout=5)
+        data = response.json()
+
+        results = []
+
+        if "RelatedTopics" in data:
+            for item in data["RelatedTopics"]:
+                if isinstance(item, dict) and "Text" in item:
+                    results.append(item["Text"])
+
+                    if len(results) >= top_k:
+                        break
+
+        return results
+
+    except Exception:
+        # Fail silently → fallback will handle
+        return []
+
+# -----------------------
+# RETRIEVER CLASS
+# -----------------------
 class EvidenceRetriever:
-    def __init__(self, documents: Iterable[str] | None = None, model_name: str = "all-MiniLM-L6-v2") -> None:
+    def __init__(
+        self, documents: Iterable[str] | None = None, 
+        model_name: str = "all-MiniLM-L6-v2",
+    ) -> None:
+        # Fallback static docs
         self.documents = list(documents) if documents is not None else self._default_documents()
+
+        # Embedding model
         self.model = SentenceTransformer(model_name)
-        self._doc_embeddings = self._build_index(self.documents)
+        # self._doc_embeddings = self._build_index(self.documents)
 
     @staticmethod
     def _default_documents() -> list[str]:
         return [
-            "The Federal Reserve kept interest rates unchanged this week while signaling a cautious approach to future cuts as inflation remains above target.",
-            "A major technology company announced a new AI chip designed to reduce data-center energy use by up to 30 percent in large-scale inference workloads.",
-            "Global oil prices rose after supply disruptions in key shipping routes raised concerns about near-term inventory shortages.",
-            "A national health agency reported that seasonal flu cases declined for the third consecutive week following expanded vaccination campaigns.",
-            "Scientists published a study showing that urban tree canopies can lower summer surface temperatures by several degrees in densely populated neighborhoods.",
-            "The local transit authority approved a multi-year plan to modernize rail signaling systems and improve on-time performance across commuter lines.",
+            "Fact-checking organizations verify claims using multiple credible sources.",
+            "Misinformation often spreads faster on social media than verified information.",
+            "Images taken out of context can mislead viewers about real events.",
+            "Satirical content is not intended to be factual but may be misinterpreted.",
+            "Sponsored content may resemble news but is paid promotion.",
         ]
 
     @staticmethod
@@ -36,26 +76,54 @@ class EvidenceRetriever:
         norms[norms == 0] = 1.0
         return matrix / norms
 
-    def _build_index(self, documents: list[str]) -> np.ndarray:
-        embeddings = self.model.encode(documents, convert_to_numpy=True)
+    def _encode(self, texts: list[str]) -> np.ndarray:
+        embeddings = self.model.encode(texts, convert_to_numpy=True)
         return self._l2_normalize(embeddings.astype(np.float32))
 
     def retrieve(self, query: str, top_k: int = 3) -> list[RetrievalResult]:
         if not query.strip():
             return []
 
-        query_embedding = self.model.encode([query], convert_to_numpy=True).astype(np.float32)
-        query_embedding = self._l2_normalize(query_embedding)[0]
+        # -------------------------
+        # 1. FETCH REAL WEB DATA
+        # -------------------------
+        web_docs = fetch_web_evidence(query, top_k=5)
+        
+        # Use web docs if available, else fallback
+        documents = web_docs if web_docs else self.documents
 
-        scores = self._doc_embeddings @ query_embedding
+        # -------------------------
+        # 2. EMBEDDINGS + SIMILARITY
+        # -------------------------
+        doc_embeddings = self._encode(documents)
+        query_embedding = self._encode([query])[0]
+
+        scores = doc_embeddings @ query_embedding
         top_indices = np.argsort(scores)[::-1][:top_k]
 
-        return [RetrievalResult(text=self.documents[i], score=float(scores[i])) for i in top_indices]
+        return [
+            RetrievalResult(text=documents[i], score=float(scores[i]))
+            for i in top_indices
+        ]
 
-
+# -------------------------
+# GLOBAL RETRIEVER INSTANCE
+# -------------------------
 retriever = EvidenceRetriever()
 
 
-def retrieve_evidence(query: str, top_k: int = 3) -> dict[str, list[dict[str, float | str]]]:
+# -------------------------
+# PUBLIC FUNCTION (USED BY PIPELINE)
+# -------------------------
+def retrieve_evidence(
+    query: str, top_k: int = 3
+) -> dict[str, list[dict[str, float | str]]]:
+
     results = retriever.retrieve(query, top_k=top_k)
-    return {"evidence": [{"text": item.text, "score": round(item.score, 4)} for item in results]}
+
+    return {
+        "evidence": [
+            {"text": item.text, "score": round(item.score, 4)}
+            for item in results
+        ]
+    }
