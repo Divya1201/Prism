@@ -1,53 +1,97 @@
-
 """Service layer for misinformation detection logic."""
 
 from app.utils.preprocessing import preprocess_text
 
 
-SUSPICIOUS_KEYWORDS = {
-    "shocking",
-    "secret",
-    "cover-up",
-    "they don't want you to know",
-    "miracle cure",
-    "100% guaranteed",
-    "hoax",
+# 8 misinformation categories (aligned with README)
+CATEGORY_KEYWORDS = {
+    "fabricated": [
+        "completely false",
+        "made up",
+        "fake story",
+        "hoax",
+        "not real",
+    ],
+    "false_context": [
+        "old image",
+        "misleading context",
+        "out of context",
+        "from years ago",
+    ],
+    "manipulated": [
+        "edited",
+        "photoshopped",
+        "altered image",
+        "deepfake",
+    ],
+    "imposter": [
+        "fake account",
+        "pretending to be",
+        "impersonating",
+    ],
+    "false_connection": [
+        "clickbait",
+        "headline doesn't match",
+        "misleading headline",
+    ],
+    "satire": [
+        "satire",
+        "parody",
+        "not meant to be real",
+    ],
+    "astroturfing": [
+        "bot campaign",
+        "coordinated effort",
+        "fake engagement",
+    ],
+    "sponsored": [
+        "sponsored",
+        "paid promotion",
+        "advertisement",
+        "ad disguised",
+    ],
 }
 
 
 def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | float]:
-    """Analyze text with a simple keyword-based baseline classifier."""
+    """Analyze text and classify into misinformation categories."""
+
     processed_text = preprocess_text(text)
 
-    hits = [keyword for keyword in SUSPICIOUS_KEYWORDS if keyword in processed_text]
-    keyword_score = min(len(hits) / 3, 1.0)
+    # Count keyword matches per category
+    scores = {}
+    for category, keywords in CATEGORY_KEYWORDS.items():
+        hits = sum(1 for kw in keywords if kw in processed_text)
+        scores[category] = hits
 
-    if len(processed_text.split()) < 5:
-        keyword_score = min(keyword_score + 0.1, 1.0)
+    # Select best category
+    best_category = max(scores, key=scores.get)
+    best_score = scores[best_category]
 
-    if image_url:
-        keyword_score = max(keyword_score - 0.05, 0.0)
-
-    if keyword_score >= 0.5:
-        prediction = "fake"
-        confidence = round(0.6 + (keyword_score * 0.35), 2)
+    # If no keywords matched → fallback
+    if best_score == 0:
+        prediction = "unknown"
+        confidence = 0.5
         explanation = (
-            "The content contains phrases commonly associated with sensational or "
-            "misleading claims."
+            "No strong indicators found for a specific misinformation category."
         )
     else:
-        prediction = "real"
-        confidence = round(0.55 + ((1 - keyword_score) * 0.35), 2)
+        prediction = best_category
+
+        # Confidence calculation
+        confidence = min(0.5 + best_score * 0.15, 0.95)
+
         explanation = (
-            "The content appears neutral and does not contain strong misinformation "
-            "indicators in this baseline check."
+            f"Classified as '{prediction}' based on detected linguistic patterns "
+            f"associated with this type of misinformation."
         )
 
-    if hits:
-        explanation += f" Trigger keywords: {', '.join(hits)}."
+    # Slight adjustment if image present
+    if image_url:
+        confidence = max(confidence - 0.05, 0.0)
 
     return {
         "prediction": prediction,
-        "confidence": min(confidence, 0.99),
+        "confidence": round(confidence, 2),
         "explanation": explanation,
     }
