@@ -1,6 +1,6 @@
 """Service layer for misinformation detection logic."""
 
-from app.utils.preprocessing import preprocess_text
+from backend.utils.preprocessing import preprocess_text
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 from functools import lru_cache
