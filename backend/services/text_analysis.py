@@ -1,7 +1,18 @@
 """Service layer for misinformation detection logic."""
 
 from app.utils.preprocessing import preprocess_text
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 
+MODEL_PATH = "models/bert_model"
+#Safe loading
+try:
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
+    model.eval()
+except Exception:
+    tokenizer = None
+    model = None
 
 # 8 misinformation categories (aligned with README)
 CATEGORY_KEYWORDS = {
@@ -54,44 +65,75 @@ CATEGORY_KEYWORDS = {
 
 
 def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | float]:
-    """Analyze text and classify into misinformation categories."""
+    """Hybrid analysis: BERT + keyword fallback"""
 
     processed_text = preprocess_text(text)
 
-    # Count keyword matches per category
+    # -------------------------
+    # 1. BERT PREDICTION
+    # -------------------------
+    if tokenizer is None or model is None:
+        bert_prediction = None
+        bert_confidence = 0.0
+    else:
+        try:
+            inputs = tokenizer(processed_text, return_tensors="pt", truncation=True, padding=True)
+
+            with torch.no_grad():
+                outputs = model(**inputs)
+
+            probs = torch.nn.functional.softmax(outputs.logits, dim=1)
+            confidence, predicted_class = torch.max(probs, dim=1)
+
+            bert_prediction = model.config.id2label[predicted_class.item()]
+            bert_confidence = confidence.item()
+
+        except Exception:
+            bert_prediction = None
+            bert_confidence = 0.0
+
+    # -------------------------
+    # 2. KEYWORD FALLBACK
+    # -------------------------
     scores = {}
     for category, keywords in CATEGORY_KEYWORDS.items():
         hits = sum(1 for kw in keywords if kw in processed_text)
         scores[category] = hits
 
-    # Select best category
     best_category = max(scores, key=scores.get)
     best_score = scores[best_category]
 
-    # If no keywords matched → fallback
-    if best_score == 0:
-        prediction = "unknown"
-        confidence = 0.5
-        explanation = (
-            "No strong indicators found for a specific misinformation category."
-        )
+    # -------------------------
+    # 3. DECISION LOGIC
+    # -------------------------
+
+    # If BERT is confident → trust it
+    if bert_confidence >= 0.6:
+        prediction = bert_prediction
+        confidence = bert_confidence
+        explanation = f"Predicted as '{prediction}' using trained BERT model."
+
+    # Else fallback to keyword logic
     else:
-        prediction = best_category
+        if best_score == 0:
+            prediction = "unknown"
+            confidence = 0.5
+            explanation = "No strong indicators found."
+        else:
+            prediction = best_category
+            confidence = min(0.5 + best_score * 0.15, 0.95)
+            explanation = (
+                f"Classified as '{prediction}' using keyword-based fallback."
+            )
 
-        # Confidence calculation
-        confidence = min(0.5 + best_score * 0.15, 0.95)
-
-        explanation = (
-            f"Classified as '{prediction}' based on detected linguistic patterns "
-            f"associated with this type of misinformation."
-        )
-
-    # Slight adjustment if image present
+    # -------------------------
+    # 4. IMAGE ADJUSTMENT
+    # -------------------------
     if image_url:
         confidence = max(confidence - 0.05, 0.0)
 
     return {
         "prediction": prediction,
-        "confidence": round(confidence, 2),
+        "confidence": round(min(confidence,0.99), 2),
         "explanation": explanation,
     }
