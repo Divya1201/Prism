@@ -15,7 +15,17 @@ def test_pipeline_success_without_image():
     }
 
     # Check prediction is valid
-    assert payload["prediction"] in ["fake", "real"]
+    assert payload["prediction"] in [
+        "fabricated",
+        "false_context",
+        "manipulated",
+        "imposter",
+        "false_connection",
+        "satire",
+        "astroturfing",
+        "sponsored",
+        "unknown",
+    ]
 
     # Confidence should be valid probability
     assert 0.0 <= payload["confidence"] <= 1.0
