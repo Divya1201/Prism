@@ -28,7 +28,7 @@ class AnalysisPipeline:
 
         # 3. RETRIEVE EVIDENCE
         query = f"{cleaned} misinformation type: {prediction}"
-        retrieval_result = retrieve_evidence(cleaned)
+        retrieval_result = retrieve_evidence(query)
         evidence_list = retrieval_result["evidence"]
 
         # Extract only text for explainer
@@ -67,6 +67,6 @@ class AnalysisPipeline:
             "prediction": prediction,
             "confidence": confidence,
             "evidence": evidence_list,
-            "explanation": explanation,
+            "explanation": final_explanation,
             "image_analysis": image_analysis,
         }
