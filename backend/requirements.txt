@@ -1,3 +1,13 @@
+# Backend
 fastapi==0.115.12
 uvicorn[standard]==0.34.0
 pydantic==2.11.3
+
+# ML/ Data
+transformers
+torch
+sentence-transformers
+datasets
+numpy
+pandas
+requests
