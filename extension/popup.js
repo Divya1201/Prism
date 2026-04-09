@@ -4,13 +4,20 @@ const analyzeBtn = document.getElementById('analyzeBtn');
 const statusEl = document.getElementById('status');
 const resultEl = document.getElementById('result');
 const errorEl = document.getElementById('error');
+
 const predictionEl = document.getElementById('prediction');
 const confidenceEl = document.getElementById('confidence');
 const explanationEl = document.getElementById('explanation');
+const evidenceEl = document.getElementById('evidence'); // ✅ NEW
 
+// -----------------------------
+// UI HELPERS
+// -----------------------------
 function setLoading(isLoading) {
   analyzeBtn.disabled = isLoading;
-  statusEl.textContent = isLoading ? 'Extracting page text and analyzing...' : 'Ready.';
+  statusEl.textContent = isLoading
+    ? 'Extracting page text and analyzing...'
+    : 'Ready.';
 }
 
 function showError(message) {
@@ -23,21 +30,48 @@ function showResult(data) {
   errorEl.hidden = true;
   resultEl.hidden = false;
 
+  // -----------------------------
+  // Prediction
+  // -----------------------------
   predictionEl.textContent = data.prediction ?? 'N/A';
 
+  // -----------------------------
+  // Confidence
+  // -----------------------------
   if (typeof data.confidence === 'number') {
     confidenceEl.textContent = `${(data.confidence * 100).toFixed(2)}%`;
   } else {
     confidenceEl.textContent = data.confidence ?? 'N/A';
   }
 
-  explanationEl.textContent = data.explanation ?? 'No explanation provided.';
+  // -----------------------------
+  // Explanation
+  // -----------------------------
+  explanationEl.textContent =
+    data.explanation ?? 'No explanation provided.';
+
+  // -----------------------------
+  // Evidence (NEW)
+  // -----------------------------
+  if (data.evidence && data.evidence.length > 0) {
+    // Show top 3 evidence lines
+    evidenceEl.textContent = data.evidence
+      .slice(0, 3)
+      .map((e) => '• ' + e.text)
+      .join('\n');
+  } else {
+    evidenceEl.textContent = 'No evidence found.';
+  }
 }
 
+// -----------------------------
+// TAB HELPERS
+// -----------------------------
 function getCurrentTab() {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const [tab] = tabs;
+
       if (chrome.runtime.lastError) {
         reject(new Error(chrome.runtime.lastError.message));
         return;
@@ -55,22 +89,29 @@ function getCurrentTab() {
 
 function getPageContent(tabId) {
   return new Promise((resolve, reject) => {
-    chrome.tabs.sendMessage(tabId, { type: 'GET_PAGE_TEXT' }, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError.message));
-        return;
-      }
+    chrome.tabs.sendMessage(
+      tabId,
+      { type: 'GET_PAGE_TEXT' },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
 
-      if (!response?.text) {
-        reject(new Error('Unable to extract text from this page.'));
-        return;
-      }
+        if (!response?.text) {
+          reject(new Error('Unable to extract text from this page.'));
+          return;
+        }
 
-      resolve(response);
-    });
+        resolve(response);
+      }
+    );
   });
 }
 
+// -----------------------------
+// MAIN FUNCTION
+// -----------------------------
 async function analyzeCurrentPage() {
   setLoading(true);
   errorEl.hidden = true;
@@ -84,13 +125,11 @@ async function analyzeCurrentPage() {
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        url: page.url,
-        title: page.title,
-        text: page.text
-      })
+        text: page.text, // ✅ only required field
+      }),
     });
 
     if (!response.ok) {
@@ -98,6 +137,7 @@ async function analyzeCurrentPage() {
     }
 
     const data = await response.json();
+
     showResult(data);
     statusEl.textContent = 'Analysis complete.';
   } catch (error) {
@@ -108,4 +148,7 @@ async function analyzeCurrentPage() {
   }
 }
 
+// -----------------------------
+// EVENT LISTENER
+// -----------------------------
 analyzeBtn.addEventListener('click', analyzeCurrentPage);
