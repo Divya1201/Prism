@@ -3,10 +3,10 @@
 from __future__ import annotations
 from typing import Any
 
-from services.text_analysis import analyze_text
-from services.retrieval import retrieve_evidence
-from services.explainer import ExplainerService
-from services.image_analysis import ImageAnalysisService
+from backend.services.text_analysis import analyze_text
+from backend.services.retrieval import retrieve_evidence
+from backend.services.explainer import ExplainerService
+from backend.services.image_analysis import ImageAnalysisService
 
 class AnalysisPipeline:
     """Coordinates baseline text analysis with retrieval/explanation placeholders."""
