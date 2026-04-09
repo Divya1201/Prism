@@ -27,6 +27,7 @@ class AnalysisPipeline:
         confidence = text_result["confidence"]
 
         # 3. RETRIEVE EVIDENCE
+        query = f"{cleaned} misinformation type: {prediction}"
         retrieval_result = retrieve_evidence(cleaned)
         evidence_list = retrieval_result["evidence"]
 
@@ -38,14 +39,20 @@ class AnalysisPipeline:
         # 4. GENERATE EXPLANATION (LLM)
         try:
             explanation_result = self.explainer.generate_explanation(
-                input_text=cleaned,
+                input_text=f"{cleaned}\nPredicted category: {prediction}",
                 retrieved_evidence=evidence_texts
             )
-            explanation = explanation_result.get("explanation", "No explanation generated.")
+            explanation_llm = explanation_result.get("explanation", "No explanation generated.")
         except Exception:
-            explanation = "Explanation generation failed. Showing retrieved evidence instead." 
+            explanation_llm = "Explanation generation failed. Showing retrieved evidence instead." 
 
-        # 5. IMAGE ANALYSIS (optional)
+        # 5. MERGE EXPLANATIONS
+        final_explanation = (
+            f"{text_result['explanation']}\n\n"
+            f"Supporting analysis:\n{explanation_llm}"
+        )
+        
+        # 6. IMAGE ANALYSIS (optional)
         if image_url:
             try:
                 image_analysis = self.image_service.analyze_image_url(image_url)
@@ -55,7 +62,7 @@ class AnalysisPipeline:
         else:
             image_analysis = {"enabled": False}
 
-        # 6. FINAL RESPONSE
+        # 7. FINAL RESPONSE
         return {
             "prediction": prediction,
             "confidence": confidence,
