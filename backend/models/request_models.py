@@ -7,7 +7,12 @@ from pydantic import BaseModel, Field, HttpUrl
 
 class AnalyzeRequest(BaseModel):
     text: str = Field(..., min_length=1)
-    image_url: HttpUrl | None = None
+    title: Optional[str] = None
+    url: Optional[HttpUrl] = None
+    source: Optional[str] = None
+    author: Optional[str] = None
+
+    image_url: Optional[HttpUrl] = None
 
 
 class AnalyzeResponse(BaseModel):
