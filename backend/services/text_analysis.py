@@ -1,146 +1,104 @@
-"""Service layer for misinformation detection logic."""
+"""Service layer for misinformation detection using LLM (HuggingFace API)."""
 
+from __future__ import annotations
+
+import os
+import requests
 from backend.utils.preprocessing import preprocess_text
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import torch
-from functools import lru_cache
-from pathlib import Path
-
-MODEL_PATH = "models/bert_model"
-# ---------------------------
-# LAZY LOAD MODEL 
-# ---------------------------
-@lru_cache(maxsize=1)
-def load_model():
-    if not Path(MODEL_PATH).exists():
-        raise RuntimeError(
-             "Model not found. Please train it using train_text_classifier.py"
-        )
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
-    model.eval()
-
-    return tokenizer, model
 
 # ---------------------------
-# DEVICE SETUP
+# CONFIG
 # ---------------------------
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
-# 8 misinformation categories (aligned with README)
-CATEGORY_KEYWORDS = {
-    "fabricated": [
-        "completely false",
-        "made up",
-        "fake story",
-        "hoax",
-        "not real",
-    ],
-    "false_context": [
-        "old image",
-        "misleading context",
-        "out of context",
-        "from years ago",
-    ],
-    "manipulated": [
-        "edited",
-        "photoshopped",
-        "altered image",
-        "deepfake",
-    ],
-    "imposter": [
-        "fake account",
-        "pretending to be",
-        "impersonating",
-    ],
-    "false_connection": [
-        "clickbait",
-        "headline doesn't match",
-        "misleading headline",
-    ],
-    "satire": [
-        "satire",
-        "parody",
-        "not meant to be real",
-    ],
-    "astroturfing": [
-        "bot campaign",
-        "coordinated effort",
-        "fake engagement",
-    ],
-    "sponsored": [
-        "sponsored",
-        "paid promotion",
-        "advertisement",
-        "ad disguised",
-    ],
+API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-small"
+
+HEADERS = {
+    "Authorization": f"Bearer {HF_TOKEN}"
 }
 
-
+# ---------------------------
+# MAIN FUNCTION
+# ---------------------------
 def analyze_text(text: str, image_url: str | None = None) -> dict[str, str | float]:
-    """Hybrid analysis: BERT + keyword fallback"""
+    """Analyze text using LLM for misinformation classification."""
 
     processed_text = preprocess_text(text)
 
-    # -------------------------
-    # 1. BERT PREDICTION
-    # -------------------------
+    # ---------------------------
+    # PROMPT (VERY IMPORTANT)
+    # ---------------------------
+    prompt = f"""
+You are an expert in misinformation detection.
+
+Classify the following content into ONE of these categories:
+- fabricated
+- false_context
+- manipulated
+- imposter
+- false_connection
+- satire
+- astroturfing
+- sponsored
+- unknown
+
+Also provide a short explanation.
+
+Text:
+{processed_text}
+
+Output format:
+Category: <category>
+Explanation: <reason>
+"""
+
+    # ---------------------------
+    # API CALL
+    # ---------------------------
     try:
-        tokenizer, model = load_model()
-        model.to(DEVICE)
+        response = requests.post(
+            API_URL,
+            headers=HEADERS,
+            json={"inputs": prompt},
+            timeout=5
+        )
 
-        inputs = tokenizer(
-            processed_text,
-            return_tensors="pt",
-            truncation=True,
-            padding=True,
-        ).to(DEVICE)
+        if response.status_code != 200:
+            raise RuntimeError(f"HF API error: {response.status_code}")
 
-        with torch.no_grad():
-            outputs = model(**inputs)
+        result = response.json()
 
-        probs = torch.nn.functional.softmax(outputs.logits, dim=1)
-        confidence, predicted_class = torch.max(probs, dim=1)
-
-        bert_prediction = model.config.id2label[predicted_class.item()]
-        bert_confidence = confidence.item()
-
-    except Exception:
-        bert_prediction = None
-        bert_confidence = 0.0
-
-    # -------------------------
-    # 2. KEYWORD FALLBACK
-    # -------------------------
-    scores = {}
-    for category, keywords in CATEGORY_KEYWORDS.items():
-        hits = sum(1 for kw in keywords if kw in processed_text)
-        scores[category] = hits
-
-    best_category = max(scores, key=scores.get)
-    best_score = scores[best_category]
-
-    # -------------------------
-    # 3. DECISION LOGIC
-    # -------------------------
-    if bert_confidence >= 0.6 and bert_prediction:
-        prediction = bert_prediction
-        confidence = bert_confidence
-        explanation = f"Predicted as '{prediction}' using trained BERT model."
-
-    else:
-        if best_score == 0:
-            prediction = "unknown"
-            confidence = 0.5
-            explanation = "No strong indicators found."
+        # Handle different HF response formats
+        if isinstance(result, list):
+            generated_text = result[0].get("generated_text", "")
         else:
-            prediction = best_category
-            confidence = min(0.5 + best_score * 0.15, 0.95)
-            explanation = f"Classified as '{prediction}' using keyword-based fallback."
+            generated_text = str(result)
 
-    # -------------------------
-    # 4. IMAGE ADJUSTMENT
-    # -------------------------
+        # ---------------------------
+        # PARSE OUTPUT
+        # ---------------------------
+        prediction = "unknown"
+        explanation = "No explanation generated."
+
+        if "Category:" in generated_text:
+            prediction = generated_text.split("Category:")[1].split("\n")[0].strip()
+
+        if "Explanation:" in generated_text:
+            explanation = generated_text.split("Explanation:")[1].strip()
+
+        confidence = 0.7  # static confidence for now
+
+    except Exception as e:
+        # ---------------------------
+        # FALLBACK (VERY IMPORTANT)
+        # ---------------------------
+        prediction = "unknown"
+        explanation = "Analysis failed or API unavailable."
+        confidence = 0.5
+
+    # ---------------------------
+    # IMAGE ADJUSTMENT (OPTIONAL)
+    # ---------------------------
     if image_url:
         confidence = max(confidence - 0.05, 0.0)
 
