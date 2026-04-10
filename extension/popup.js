@@ -8,7 +8,7 @@ const errorEl = document.getElementById('error');
 const predictionEl = document.getElementById('prediction');
 const confidenceEl = document.getElementById('confidence');
 const explanationEl = document.getElementById('explanation');
-const evidenceEl = document.getElementById('evidence'); // ✅ NEW
+const evidenceEl = document.getElementById('evidence'); 
 
 // -----------------------------
 // UI HELPERS
@@ -51,7 +51,7 @@ function showResult(data) {
     data.explanation ?? 'No explanation provided.';
 
   // -----------------------------
-  // Evidence (NEW)
+  // Evidence 
   // -----------------------------
   if (data.evidence && data.evidence.length > 0) {
     // Show top 3 evidence lines
@@ -128,7 +128,10 @@ async function analyzeCurrentPage() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        text: page.text, // ✅ only required field
+        text: page.text, 
+        title: page.title || '',
+        url: page.url || '',
+        source: 'webpage',
       }),
     });
 
