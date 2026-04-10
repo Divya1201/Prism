@@ -41,11 +41,17 @@ def analyze(payload: AnalyzeRequest) -> dict[str, object]:
 
     try:
         result = pipeline.run(
-            payload.text,
-            str(payload.image_url) if payload.image_url else None,
+            text=payload.text,
+            title=payload.title,
+            url=str(payload.url) if payload.url else None,
+            source=payload.source,
+            author=payload.author,
+            image_url=str(payload.image_url) if payload.image_url else None
         )
 
-        logger.info(f"Prediction: {result.get('prediction')}")
+        logger.info(
+            f"Prediction: {result.get('prediction')} | Confidence: {result.get('confidence')}"
+        )
 
         return result
 
