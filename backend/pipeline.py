@@ -12,7 +12,15 @@ class AnalysisPipeline:
     def __init__(self):
         self.explainer = ExplainerService()
         
-    def run(self, text: str, image_url: str | None = None):
+    def run(
+        self,
+        text: str,
+        title: str | None = None,
+        url: str | None = None,
+        source: str | None = None,
+        author: str | None = None,
+        image_url: str | None = None,
+    ):
 
         # 1. Validate input
         cleaned = text.strip()
