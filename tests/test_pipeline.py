@@ -1,4 +1,4 @@
-from prism_pipeline.pipeline import AnalysisPipeline
+from backend.pipeline import AnalysisPipeline
 
 
 def test_pipeline_success_without_image():
