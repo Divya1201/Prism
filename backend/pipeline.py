@@ -55,8 +55,7 @@ class AnalysisPipeline:
             from backend.services.image_analysis import ImageAnalysisService
             try:
                 image_service = ImageAnalysisService()
-                image_analysis = self.image_service.analyze_image_url(image_url)
-                image_analysis["enabled"] = True
+                image_analysis = image_service.analyze_image_url(image_url)
             except Exception:
                 image_analysis = {"enabled": False, "error": "Image analysis failed"}
         else:
