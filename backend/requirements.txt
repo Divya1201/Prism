@@ -11,3 +11,4 @@ datasets
 numpy
 pandas
 requests
+pillow
