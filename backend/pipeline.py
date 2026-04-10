@@ -31,7 +31,11 @@ class AnalysisPipeline:
 
         # Extract only text for explainer
         if not evidence_list:
-            evidence_list = [{"text": "No supporting evidence found.", "score": 0.0}]
+            evidence_list = [{
+                "text": "No external evidence found. The analysis is based on linguistic patterns.",
+                "source": "system",
+                "score": 0.0
+            }]
         evidence_texts = [item["text"] for item in evidence_list]
             
         # 4. GENERATE EXPLANATION (LLM)
@@ -53,10 +57,7 @@ class AnalysisPipeline:
             )
 
         # 5. MERGE EXPLANATIONS
-        final_explanation = (
-            f"{text_result['explanation']}\n\n"
-            f"Supporting analysis:\n{explanation_llm}"
-        )
+        final_explanation = explanation_llm.strip()
         
         # 6. IMAGE ANALYSIS (optional)
         if image_url:
