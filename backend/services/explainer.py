@@ -1,67 +1,77 @@
+"""Explainer service using LLM (HuggingFace API)"""
+
 from __future__ import annotations
 
 import os
 import requests
-from typing import Iterable, Sequence
+from typing import Sequence, Iterable
 
-# -----------------------------
-# CONFIG
-# -----------------------------
 HF_TOKEN = os.getenv("HF_TOKEN")
+
 API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-small"
 
-headers = {
+HEADERS = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
 
 
-# -----------------------------
-# EXPLAINER SERVICE
-# -----------------------------
 class ExplainerService:
     def generate_explanation(
         self,
         input_text: str,
+        prediction: str,
         retrieved_evidence: Sequence[str] | Iterable[str],
     ) -> dict[str, str]:
 
-        # Prepare evidence
-        evidence_lines = [
-            f"- {line.strip()}"
-            for line in retrieved_evidence
-            if line and line.strip()
-        ]
-
-        evidence_block = (
-            "\n".join(evidence_lines)
-            if evidence_lines
-            else "- No evidence retrieved."
+        # Format evidence nicely
+        evidence_block = "\n".join(
+            f"- {e}" for e in retrieved_evidence if e.strip()
         )
 
-        # Prompt
-        prompt = (
-            "Explain why this claim may be misleading.\n\n"
-            f"Claim: {input_text.strip()}\n\n"
-            f"Evidence:\n{evidence_block}\n\n"
-            "Answer briefly:"
-        )
+        prompt = f"""
+You are an expert in misinformation analysis.
+
+A piece of content has been classified as: {prediction}
+
+Content:
+{input_text}
+
+Supporting evidence:
+{evidence_block}
+
+Explain:
+1. Why this content may be misleading
+2. What makes it suspicious
+3. How the evidence supports this
+
+Keep it clear and concise.
+"""
 
         try:
             response = requests.post(
                 API_URL,
-                headers=headers,
+                headers=HEADERS,
                 json={"inputs": prompt},
-                timeout=10
+                timeout=5
             )
 
             result = response.json()
 
             if isinstance(result, list):
-                explanation = result[0]["generated_text"]
+                explanation = result[0].get("generated_text", "")
             else:
-                explanation = "Explanation unavailable."
+                explanation = str(result)
+
+            explanation = explanation.strip()
+
+            if not explanation:
+                raise ValueError("Empty explanation")
 
         except Exception:
-            explanation = "Error generating explanation."
+            # Fallback explanation
+            explanation = (
+                f"This content was classified as '{prediction}'. "
+                f"Based on available evidence, it may contain misleading or incomplete information."
+            )
 
         return {"explanation": explanation}
