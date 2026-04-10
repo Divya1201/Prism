@@ -1,14 +1,13 @@
 """Core analysis pipeline orchestration."""
 
 from __future__ import annotations
-from typing import Any
 
 from backend.services.text_analysis import analyze_text
 from backend.services.retrieval import retrieve_evidence
 from backend.services.explainer import ExplainerService
 
 class AnalysisPipeline:
-    """Coordinates baseline text analysis with retrieval/explanation placeholders."""
+    """Coordinates text analysis, retrieval, explanation, and image analysis."""
     def __init__(self):
         self.explainer = ExplainerService()
         
@@ -22,20 +21,41 @@ class AnalysisPipeline:
         image_url: str | None = None,
     ):
 
-        # 1. Validate input
-        cleaned = text.strip()
+        # 1. BUILD CONTEXT
+
+        if not text or not text.strip():
+            raise ValueError("text must not be empty")
+            
+        context_parts = [text.strip()]
+
+        if title:
+            context_parts.append(f"Title: {title}")
+
+        if source:
+            context_parts.append(f"Source: {source}")
+
+        if author:
+            context_parts.append(f"Author: {author}")
+
+        if url:
+            context_parts.append(f"URL: {url}")
+
+        cleaned = "\n".join(context_parts).strip()
+
         if not cleaned:
             raise ValueError("text must not be empty")
 
         # 2. TEXT ANALYSIS (fake / real)
+        
         text_result = analyze_text(cleaned, image_url)
-        prediction = text_result["prediction"]
-        confidence = text_result["confidence"]
+        prediction = text_result.get("prediction", "unknown")
+        confidence = text_result.get("confidence", 0.5)
 
         # 3. RETRIEVE EVIDENCE
-        query = f"{cleaned} misinformation type: {prediction}"
+        
+        query = f"{text} {title or ''} {prediction} misinformation"
         retrieval_result = retrieve_evidence(query)
-        evidence_list = retrieval_result["evidence"]
+        evidence_list = retrieval_result.get("evidence", [])
 
         # Extract only text for explainer
         if not evidence_list:
@@ -69,14 +89,18 @@ class AnalysisPipeline:
         
         # 6. IMAGE ANALYSIS (optional)
         if image_url:
-            from backend.services.image_analysis import ImageAnalysisService
             try:
+                from backend.services.image_analysis import ImageAnalysisService
                 image_service = ImageAnalysisService()
                 image_analysis = image_service.analyze_image_url(image_url)
             except Exception:
                 image_analysis = {"enabled": False, "error": "Image analysis failed"}
         else:
             image_analysis = {"enabled": False}
+            
+        # MERGE iMAGE INSIGHT
+         if image_analysis.get("enabled") and image_analysis.get("analysis"):
+            final_explanation += f"\n\nImage Insight: {image_analysis['analysis']}"
 
         # 7. FINAL RESPONSE
         return {
