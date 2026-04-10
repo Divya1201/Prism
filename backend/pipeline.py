@@ -37,12 +37,20 @@ class AnalysisPipeline:
         # 4. GENERATE EXPLANATION (LLM)
         try:
             explanation_result = self.explainer.generate_explanation(
-                input_text=f"{cleaned}\nPredicted category: {prediction}",
+                input_text=cleaned,
+                prediction=prediction,
                 retrieved_evidence=evidence_texts
             )
-            explanation_llm = explanation_result.get("explanation", "No explanation generated.")
+
+            explanation_llm = explanation_result.get(
+                "explanation",
+                "No explanation generated."
+            )
+
         except Exception:
-            explanation_llm = "Explanation generation failed. Showing retrieved evidence instead." 
+            explanation_llm = (
+                "Explanation generation failed. Showing retrieved evidence instead."
+            )
 
         # 5. MERGE EXPLANATIONS
         final_explanation = (
