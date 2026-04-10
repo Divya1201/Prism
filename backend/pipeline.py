@@ -6,13 +6,11 @@ from typing import Any
 from backend.services.text_analysis import analyze_text
 from backend.services.retrieval import retrieve_evidence
 from backend.services.explainer import ExplainerService
-from backend.services.image_analysis import ImageAnalysisService
 
 class AnalysisPipeline:
     """Coordinates baseline text analysis with retrieval/explanation placeholders."""
     def __init__(self):
         self.explainer = ExplainerService()
-        self.image_service = ImageAnalysisService()
         
     def run(self, text: str, image_url: str | None = None):
 
@@ -54,7 +52,9 @@ class AnalysisPipeline:
         
         # 6. IMAGE ANALYSIS (optional)
         if image_url:
+            from backend.services.image_analysis import ImageAnalysisService
             try:
+                image_service = ImageAnalysisService()
                 image_analysis = self.image_service.analyze_image_url(image_url)
                 image_analysis["enabled"] = True
             except Exception:
