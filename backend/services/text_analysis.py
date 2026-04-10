@@ -86,7 +86,7 @@ Explanation: <reason>
         if "Explanation:" in generated_text:
             explanation = generated_text.split("Explanation:")[1].strip()
 
-        confidence = 0.7  # static confidence for now
+        confidence = min(0.6 + len(prediction)/20, 0.9)
 
     except Exception as e:
         # ---------------------------
