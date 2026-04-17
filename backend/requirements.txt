@@ -13,5 +13,5 @@ pandas
 requests
 pillow
 
-
 openai
+google-cloud-vision
