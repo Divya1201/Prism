@@ -1,1 +1,32 @@
 
+text,label
+"Drinking hot water cures all diseases instantly",fabricated
+"NASA confirms Earth will go dark for 3 days",fabricated
+"COVID vaccines contain microchips for tracking",fabricated
+"Aliens have contacted world leaders secretly",satire
+"Breaking: Cats elected as city mayors worldwide",satire
+"Scientists discover humans can fly naturally",satire
+"This article is sponsored by XYZ brand but looks like news",sponsored
+"Top 10 health tips brought to you by ABC supplements",sponsored
+"Investment advice article funded by finance company",sponsored
+"Image edited to show fake protest crowd size",manipulated
+"Video clip cropped to misrepresent politician speech",manipulated
+"Old photo reused to show current disaster",false_context
+"2010 flood image shared as recent event",false_context
+"Celebrity quote shared without full context",false_context
+"Fake Twitter account pretending to be news agency",imposter
+"Website mimicking BBC style but spreading false info",imposter
+"Fake government notice circulated online",imposter
+"Headline claims miracle cure but article talks about diet tips",false_connection
+"Thumbnail shows disaster but article is unrelated",false_connection
+"Clickbait title unrelated to article content",false_connection
+"Multiple accounts posting same political message to simulate support",astroturfing
+"Coordinated campaign promoting product as grassroots movement",astroturfing
+"Fake reviews created to boost product credibility",astroturfing
+"Half true claim about health benefits exaggerated",manipulated
+"Scientific study misinterpreted to support false claim",manipulated
+"Partial data used to mislead about climate change",manipulated
+"News article omits key facts leading to wrong interpretation",false_context
+"Edited statistics chart to mislead viewers",manipulated
+"Blog falsely claiming government policy change",fabricated
+"Fake interview attributed to famous scientist",imposter
