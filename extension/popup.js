@@ -33,7 +33,19 @@ function showResult(data) {
   // -----------------------------
   // Prediction
   // -----------------------------
-  predictionEl.textContent = data.prediction ?? 'N/A';
+  const pred = data.prediction ?? 'N/A';
+  predictionEl.textContent = pred;
+
+  const colorMap = {
+    fabricated: 'red',
+    manipulated: 'red',
+    false_context: 'orange',
+    false_connection: 'orange',
+    satire: 'gold',
+    sponsored: 'blue',
+  };
+
+  predictionEl.style.color = colorMap[pred] || 'black';
 
   // -----------------------------
   // Confidence
@@ -55,10 +67,12 @@ function showResult(data) {
   // -----------------------------
   if (data.evidence && data.evidence.length > 0) {
     // Show top 3 evidence lines
-    evidenceEl.textContent = data.evidence
+    evidenceEl.innerHTML = data.evidence
       .slice(0, 3)
-      .map((e) => '• ' + e.text)
-      .join('\n');
+      .map((e) => {
+        return `<div>• <a href="${e.source}" target="_blank">${e.text}</a></div>`;
+      })
+    .join('');
   } else {
     evidenceEl.textContent = 'No evidence found.';
   }
