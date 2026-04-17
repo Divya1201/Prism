@@ -16,18 +16,6 @@ from transformers import (
     TrainingArguments,
 )
 
-label_map = {
-    "fabricated": 0,
-    "satire": 1,
-    "false_context": 2,
-    "false_connection": 3,
-    "imposter": 4,
-    "manipulated": 5,
-    "astroturfing": 6,
-    "sponsored": 7,
-    "unknown": 8,
-}
-
 MODEL_NAME = "distilbert-base-uncased"
 
 
@@ -109,6 +97,7 @@ def main():
 
     # Convert dataset
     dataset = Dataset.from_pandas(df[["text", "label_id"]])
+    dataset = dataset.rename_column("label_id", "labels")
 
     # Tokenizer
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
