@@ -53,7 +53,7 @@ class AnalysisPipeline:
 
         # 3. RETRIEVE EVIDENCE
         
-        query = f"{text} {title[:200] or ''} {prediction} misinformation"
+        query = f"{text[:200]} fact check misinformation"
         retrieval_result = retrieve_evidence(query)
         evidence_list = retrieval_result.get("evidence", [])
 
