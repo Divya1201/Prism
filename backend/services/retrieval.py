@@ -12,6 +12,16 @@ import requests
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 SERP_API_KEY = os.getenv("SERP_API_KEY")
 
+def compute_relevance(query: str, text: str) -> float:
+    query_words = set(query.lower().split())
+    text_words = set(text.lower().split())
+    
+    overlap = query_words.intersection(text_words)
+
+    if not text_words:
+        return 0.0
+    
+    return len(overlap) / (len(query_words) + 1)
 
 # ---------------------------
 # WIKIPEDIA
@@ -41,10 +51,13 @@ def fetch_wikipedia(query: str, top_k: int = 2):
             if summary_res.status_code == 200:
                 summary_data = summary_res.json()
 
+                text = summary_data.get("extract", "")
+                score = compute_relevance(query, text)
+
                 results.append({
-                    "text": summary_data.get("extract", ""),
+                    "text": text,
                     "source": f"https://en.wikipedia.org/wiki/{title}",
-                    "score": round(1 / (i + 1), 2),
+                    "score": score,
                 })
 
     except Exception:
@@ -75,10 +88,14 @@ def fetch_news(query: str, top_k: int = 2):
         data = response.json()
 
         for i, article in enumerate(data.get("articles", [])[:top_k]):
+            text = article.get("title", "")
+    
+            score = compute_relevance(query, text)
+            
             results.append({
-                "text": article.get("title", ""),
+                "text": text,
                 "source": article.get("url", ""),
-                "score": round(1 / (i + 1), 2),
+                "score": score,
             })
 
     except Exception:
@@ -108,10 +125,13 @@ def fetch_serp(query: str, top_k: int = 2):
         data = response.json()
 
         for i, item in enumerate(data.get("organic_results", [])[:top_k]):
+            text = item.get("title", "")
+            score = compute_relevance(query, text)
+            
             results.append({
-                "text": item.get("title", ""),
+                "text": text,
                 "source": item.get("link", ""),
-                "score": round(1 / (i + 1), 2),
+                "score": score,
             })
 
     except Exception:
@@ -153,6 +173,10 @@ def retrieve_evidence(query: str, top_k: int = 5):
             ]
         }
 
+    filtered = [e for e in evidence if e["score"] > 0.1]
+    if filtered:                        # to avoid situation when ALL score < 0.1
+        evidence = filtered                
+    
     # Sort by score (highest first)
     evidence = sorted(evidence, key=lambda x: x["score"], reverse=True)
 
