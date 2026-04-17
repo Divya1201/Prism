@@ -128,7 +128,7 @@ async function analyzeCurrentPage() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        text: page.text, 
+        text: page.text.slice(0, 3000), 
         title: page.title || '',
         url: page.url || '',
         source: 'webpage',
