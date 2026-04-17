@@ -40,7 +40,12 @@ class AnalysisPipeline:
         if not text or not text.strip():
             raise ValueError("text must not be empty")
             
-        context_parts = [text.strip()]
+        clean_text = text.strip()
+
+        # limit size 
+        clean_text = clean_text[:2000]
+
+        context_parts = [clean_text]
 
         if title:
             context_parts.append(f"Title: {title}")
@@ -64,6 +69,9 @@ class AnalysisPipeline:
         text_result = analyze_text(cleaned, image_url)
         prediction = text_result.get("prediction", "unknown")
         confidence = text_result.get("confidence", 0.5)
+
+        if confidence < 0.3:
+            prediction = "uncertain"
 
         # 3. RETRIEVE EVIDENCE
         
