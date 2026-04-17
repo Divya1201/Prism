@@ -5,7 +5,7 @@ pydantic==2.11.3
 
 # ML/ Data
 transformers==4.40.0
-torch==2.2.0
+torch
 sentence-transformers
 datasets==2.19.0
 numpy
