@@ -5,11 +5,13 @@ from __future__ import annotations
 from backend.services.text_analysis import analyze_text
 from backend.services.retrieval import retrieve_evidence
 from backend.services.explainer import ExplainerService
+from backend.services.image_analysis import ImageAnalysisService
 
 class AnalysisPipeline:
     """Coordinates text analysis, retrieval, explanation, and image analysis."""
     def __init__(self):
         self.explainer = ExplainerService()
+        self.image_service = ImageAnalysisService()
         
     def run(
         self,
@@ -87,19 +89,16 @@ class AnalysisPipeline:
         # 5. MERGE EXPLANATIONS
         final_explanation = explanation_llm.strip()
         
-        # 6. IMAGE ANALYSIS (optional)
+        # 6. IMAGE ANALYSIS 
+        image_analysis = {"enabled": False}
         if image_url:
             try:
-                from backend.services.image_analysis import ImageAnalysisService
-                image_service = ImageAnalysisService()
-                image_analysis = image_service.analyze_image_url(image_url)
+                image_analysis = self.image_service.analyze_image_url(image_url)
             except Exception:
                 image_analysis = {"enabled": False, "error": "Image analysis failed"}
-        else:
-            image_analysis = {"enabled": False}
             
         # MERGE iMAGE INSIGHT
-        if image_analysis.get("enabled") and image_analysis.get("analysis"):
+        if image_imageanalysisservice analysis.get("enabled") and image_analysis.get("analysis"):
             final_explanation += f"\n\nImage Insight: {image_analysis['analysis']}"
 
         # 7. FINAL RESPONSE
