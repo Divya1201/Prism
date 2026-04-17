@@ -1,18 +1,10 @@
-"""Explainer service using LLM (HuggingFace API)"""
-
 from __future__ import annotations
 
 import os
-import requests
-from typing import Sequence, Iterable
+from openai import OpenAI
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-API_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-small"
-
-HEADERS = {
-    "Authorization": f"Bearer {HF_TOKEN}"
-}
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class ExplainerService:
@@ -20,58 +12,51 @@ class ExplainerService:
         self,
         input_text: str,
         prediction: str,
-        retrieved_evidence: Sequence[str] | Iterable[str],
+        retrieved_evidence,
     ) -> dict[str, str]:
 
-        # Format evidence nicely
+        # Limit input size (important for API)
+        input_text = input_text[:2000]
+
+        # Format evidence (top 5 only)
         evidence_block = "\n".join(
-            f"- {e}" for e in retrieved_evidence if e.strip()
+            f"- {e}" for e in list(retrieved_evidence)[:5] if e
         )
 
         prompt = f"""
-You are an expert in misinformation analysis.
-
-A piece of content has been classified as: {prediction}
+You are an expert in misinformation detection.
 
 Content:
 {input_text}
 
-Supporting evidence:
+Predicted category: {prediction}
+
+Evidence:
 {evidence_block}
 
-Explain:
-1. Why this content may be misleading
-2. What makes it suspicious
-3. How the evidence supports this
+Explain clearly:
+1. Why this content is misleading
+2. What signals indicate misinformation
+3. How evidence supports this
 
-Keep it clear and concise.
+Keep it concise and factual.
 """
 
         try:
-            response = requests.post(
-                API_URL,
-                headers=HEADERS,
-                json={"inputs": prompt},
-                timeout=5
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.3,
             )
 
-            result = response.json()
-
-            if isinstance(result, list):
-                explanation = result[0].get("generated_text", "")
-            else:
-                explanation = str(result)
-
-            explanation = explanation.strip()
-
-            if not explanation:
-                raise ValueError("Empty explanation")
+            explanation = response.choices[0].message.content.strip()
 
         except Exception:
-            # Fallback explanation
             explanation = (
-                f"This content was classified as '{prediction}'. "
-                f"Based on available evidence, it may contain misleading or incomplete information."
+                f"This content is classified as '{prediction}'. "
+                f"Based on available evidence, it may be misleading."
             )
 
         return {"explanation": explanation}
