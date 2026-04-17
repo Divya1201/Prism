@@ -13,7 +13,7 @@ class AnalysisPipeline:
         self.explainer = ExplainerService()
         self.image_service = ImageAnalysisService()
 
-    def build_query(text: str, title: str | None):
+    def build_query(self, text: str, title: str | None):
         if title and len(title) > 10:
             return f"{title} news"
 
