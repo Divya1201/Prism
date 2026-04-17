@@ -30,3 +30,362 @@ text,label
 "Edited statistics chart to mislead viewers",manipulated
 "Blog falsely claiming government policy change",fabricated
 "Fake interview attributed to famous scientist",imposter
+"Boiling water instantly removes all toxins from body",fabricated
+"Scientists confirm humans can survive without sleep forever",fabricated
+"Government secretly injecting tracking chips through vaccines",fabricated
+"Eating only chocolate leads to weight loss in 2 days",fabricated
+"New study proves breathing air cures all diseases",fabricated
+"Breaking: Dogs start speaking human language worldwide",satire
+"Breaking: Trees apply for citizenship in multiple countries",satire
+"Scientists announce gravity will stop working next week",satire
+"World leaders replaced by robots overnight",satire
+"This article promoting health drink is funded by brand",sponsored
+"Top productivity hacks presented by XYZ software company",sponsored
+"Financial advice blog backed by investment firm",sponsored
+"Video edited to remove key statements from interview",manipulated
+"Audio clip altered to change meaning of speech",manipulated
+"Image cropped to hide important details",manipulated
+"Old wildfire image reused as current news",false_context
+"Previous year's protest photo reused for new event",false_context
+"Old medical report shared as current study",false_context
+"Fake Instagram account posing as politician",imposter
+"Website copying news portal layout spreading misinformation",imposter
+"Fraud email pretending to be government update",imposter
+"Headline promises cure but article only discusses symptoms",false_connection
+"Thumbnail shows accident but article is unrelated",false_connection
+"Clickbait headline exaggerates minor issue",false_connection
+"Group posts repeated political slogans to appear popular",astroturfing
+"Coordinated campaign to promote fake product reviews",astroturfing
+"Fake accounts boosting engagement artificially",astroturfing
+"Data selectively presented to mislead audience",manipulated
+"Research paper twisted to support false claim",manipulated
+"Statistics edited to exaggerate impact",manipulated
+"Article hides key context about event",false_context
+"Graph altered to show misleading trend",manipulated
+"Drinking salt water cures viral infections instantly",fabricated
+"Applying oil cures all skin diseases overnight",fabricated
+"Sleeping on floor increases lifespan by 50 years",fabricated
+"Aliens spotted running for president",satire
+"Fish granted voting rights in coastal cities",satire
+"Scientists claim humans can teleport using meditation",satire
+"This review funded by brand but presented as unbiased",sponsored
+"Sponsored post promoting skincare product as medical advice",sponsored
+"Business article funded by company it praises",sponsored
+"Video slowed down to misinterpret actions",manipulated
+"Clip edited to remove context from speech",manipulated
+"Photo altered to exaggerate crowd size",manipulated
+"Old festival image reused as current protest",false_context
+"Historic event image shared as breaking news",false_context
+"Old news headline reused with new date",false_context
+"Fake LinkedIn profile impersonating CEO",imposter
+"Fake WhatsApp message pretending to be bank alert",imposter
+"Clone website mimicking government portal",imposter
+"Headline exaggerates scientific claim",false_connection
+"Image unrelated to headline story",false_connection
+"Title misleads about actual article content",false_connection
+"Fake accounts create illusion of public support",astroturfing
+"Organized effort to trend misleading hashtag",astroturfing
+"Coordinated posts promote misleading narrative",astroturfing
+"Partial quote used to misrepresent statement",manipulated
+"Edited video changes meaning of original clip",manipulated
+"Graph cropped to hide key data points",manipulated
+"Article omits crucial background information",false_context
+"Chart modified to support false claim",manipulated
+"Drinking hot lemon water cures all diseases",fabricated
+"Magic stone heals all health problems instantly",fabricated
+"Sunlight alone can cure chronic illness",fabricated
+"Breaking: Humans evolve wings overnight",satire
+"Breaking: Cars start flying without engines",satire
+"Scientists claim time travel is available commercially",satire
+"This content is sponsored but presented as research",sponsored
+"Top diet plan backed by supplement company",sponsored
+"Financial tips article funded by loan company",sponsored
+"Video trimmed to remove important reactions",manipulated
+"Audio altered to mislead audience",manipulated
+"Image brightness adjusted to hide details",manipulated
+"Old news footage reused for current crisis",false_context
+"Previous disaster photo shared as new event",false_context
+"Old viral post reshared as recent update",false_context
+"Fake Facebook page posing as news channel",imposter
+"Fraud website mimicking official portal",imposter
+"Fake email pretending to be university notice",imposter
+"Headline unrelated to actual article content",false_connection
+"Thumbnail misleading about article topic",false_connection
+"Clickbait exaggerates minor event",false_connection
+"Bot network amplifies misinformation posts",astroturfing
+"Fake engagement boosts credibility of content",astroturfing
+"Coordinated accounts spread same narrative",astroturfing
+"Selective editing misrepresents facts",manipulated
+"Partial data used to support false argument",manipulated
+"Statistics misused to mislead readers",manipulated
+"Context missing from important claim",false_context
+"Chart edited to exaggerate differences",manipulated
+"Vaccines cause infertility",fabricated
+"5G towers spread COVID",fabricated
+"Government hiding alien contact",fabricated
+"Miracle herb cures all diseases",fabricated
+"Celebrity endorses fake investment scheme",imposter
+"Old protest video shared as recent",false_context
+"Clickbait title unrelated to content",false_connection
+"Satirical article mistaken as real news",satire
+"Coordinated fake reviews for product",astroturfing
+"Advertisement disguised as news",sponsored
+"Drinking bleach cures infections",fabricated
+"Fake doctor giving health advice online",imposter
+"Old flood image reused for new disaster",false_context
+"Misleading headline about economy",false_connection
+"Parody account posts fake political news",satire
+"Mass campaign to influence election",astroturfing
+"Sponsored content promoting product",sponsored
+"Eating garlic cures COVID",fabricated
+"Fake scientist spreading misinformation",imposter
+"Old war footage reused",false_context
+"Misleading thumbnail for video",false_connection
+"Satirical blog post misinterpreted",satire
+"Fake social media campaign",astroturfing
+"Brand promotion disguised as article",sponsored
+"Moon landing was fake",fabricated
+"Fake NGO asking for donations",imposter
+"Old earthquake image reused",false_context
+"Headline doesn’t match article",false_connection
+"Comedy article mistaken as real",satire
+"Organized fake comments online",astroturfing
+"Hidden advertisement in article",sponsored
+"Drinking alcohol kills virus",fabricated
+"Fake charity website",imposter
+"Old riot video reused",false_context
+"Clickbait misleading news",false_connection
+"Satire news misread",satire
+"Fake trending campaign",astroturfing
+"Paid influencer promotion",sponsored
+"Partial evidence used to exaggerate health benefits",manipulated
+"Research findings twisted to support false narrative",manipulated
+"Selective statistics used to mislead readers",manipulated
+"Context removed from speech to change meaning",false_context
+"Graph edited to exaggerate trends",manipulated
+"Fake report claiming sudden policy change",fabricated
+"Impersonator posing as medical expert online",imposter
+"Drinking salt water cures all infections",fabricated
+"Humans can live without oxygen for hours claim",fabricated
+"Vaccines secretly alter human DNA permanently",fabricated
+"Eating sugar cures chronic diseases instantly",fabricated
+"New research claims sunlight replaces food",fabricated
+"Breaking: Cats elected as city mayors",satire
+"Breaking: Ocean water turns into juice overnight",satire
+"Scientists say time travel available next year",satire
+"Leaders communicate with aliens secretly",satire
+"Misleading post using outdated economic data",false_context
+"Headline exaggerates minor scientific discovery",false_connection
+"Fake email posing as bank security alert",imposter
+"Edited video falsely shows celebrity endorsement",manipulated
+"Old image shared as current disaster",false_context
+"Claim that vitamins replace all medicines",fabricated
+"Article misrepresents research conclusions",false_connection
+"Fake social media account posing as official",imposter
+"Satirical news mistaken as real event",satire
+"Bot network spreads coordinated misinformation",astroturfing
+"Paid campaign promotes misleading product claims",sponsored
+"Misleading chart hides key information",manipulated
+"Fake investment scheme using brand identity",imposter
+"Old footage reused to mislead audience",false_context
+"Headline distorts actual research findings",false_connection
+"False claim that water cures all diseases",fabricated
+"Edited audio clip changes politician statement",manipulated
+"Fake government notice circulating online",imposter
+"Satirical blog post taken seriously",satire
+"Coordinated campaign spreads false narrative",astroturfing
+"Sponsored article disguised as unbiased review",sponsored
+"Claim that fasting cures all illnesses",fabricated
+"Old news article shared as recent event",false_context
+"Headline exaggerates financial crisis",false_connection
+"Fake charity request impersonating organization",imposter
+"Satirical meme misunderstood as factual news",satire
+"Artificial engagement boosts misleading content",astroturfing
+"Sponsored content promoting product without disclosure",sponsored
+"Claim that herbal drink cures cancer",fabricated
+"Misleading caption attached to unrelated image",false_context
+"Headline creates false impression of event",false_connection
+"Fake job offer scam impersonating company",imposter
+"Satirical article about science misinterpreted",satire
+"Coordinated posts influence public opinion",astroturfing
+"Vaccines contain microchips",fabricated
+"Fake police notice circulating",imposter
+"Old pandemic photo reused",false_context
+"Headline exaggerates facts",false_connection
+"Humor article mistaken as real",satire
+"Coordinated misinformation effort",astroturfing
+"Sponsored news article",sponsored
+"Magic cure for cancer discovered",fabricated
+"Fake government circular",imposter
+"Old cyclone image reused",false_context
+"Misleading article title",false_connection
+"Satirical tweet misinterpreted",satire
+"Bot-driven social campaign",astroturfing
+"Advertisement posing as journalism",sponsored
+"Herbal cure for diabetes",fabricated
+"Fake celebrity giveaway",imposter
+"Old accident video reused",false_context
+"False headline connection",false_connection
+"Satirical meme misunderstood",satire
+"Coordinated hashtag campaign",astroturfing
+"Paid article promotion",sponsored
+"Cure for baldness in one day",fabricated
+"Fake brand impersonation",imposter
+"Old fire incident reused",false_context
+"Clickbait health article",false_connection
+"Satire content taken seriously",satire
+"Mass fake engagement online",astroturfing
+"Sponsored influencer post",sponsored
+"Hot water cures all diseases",fabricated
+"Fake scholarship announcement",imposter
+"Old crime video reused",false_context
+"Misleading sports headline",false_connection
+"Parody account confusion",satire
+"Fake online movement",astroturfing
+"Hidden brand marketing",sponsored
+"Oil cures heart disease",fabricated
+"Fake bank message",imposter
+"Old protest reused",false_context
+"Headline misleads readers",false_connection
+"Satirical news confusion",satire
+"Coordinated misinformation campaign",astroturfing
+"Sponsored advertorial",sponsored
+"Banana cures cancer",fabricated
+"Fake job offer scam",imposter
+"Old disaster image reused",false_context
+"Misleading economic news",false_connection
+"Satire mistaken as fact",satire
+"Bot-driven engagement",astroturfing
+"Paid content promotion",sponsored
+"Salt water cures infection",fabricated
+"Fake university notice",imposter
+"Old event footage reused",false_context
+"False headline context",false_connection
+"Satirical article misread",satire
+"Fake viral campaign",astroturfing
+"Brand advertisement article",sponsored
+"New study falsely claims chocolate cures cancer",fabricated
+"Viral post misrepresents climate report findings",false_context
+"Fake profile posing as government official spreads updates",imposter
+"Article headline exaggerates economic downturn",false_connection
+"Comedy website publishes fictional political story",satire
+"Group artificially inflates product reviews online",astroturfing
+"Sponsored article promotes supplement without disclosure",sponsored
+"Claim that sleeping less improves immunity is misleading",false_connection
+"Old satellite image shared as current war footage",false_context
+"Fake investment app impersonates well-known bank",imposter
+"Parody news channel reports imaginary event",satire
+"Online campaign spreads coordinated misinformation on policy",astroturfing
+"Brand-funded blog post presented as independent research",sponsored
+"Post claims vaccines alter DNA without evidence",fabricated
+"Misleading caption attached to unrelated protest image",false_context
+"Headline claims scientists confirm miracle cure without proof",false_connection
+"Fake celebrity account endorses crypto scam",imposter
+"Satirical tweet about politics taken literally",satire
+"Bots amplify trending hashtag to influence opinion",astroturfing
+"Paid article promoting diet pills without disclaimer",sponsored
+"False claim that drinking soda cures infections",fabricated
+"Old wildfire footage reshared as new disaster",false_context
+"Clickbait title misrepresents actual research",false_connection
+"Fake police advisory circulates on messaging apps",imposter
+"Satirical magazine article mistaken for real news",satire
+"Coordinated fake comments boost political narrative",astroturfing
+"Sponsored tech review disguised as editorial",sponsored
+"Post claims earth will go dark for three days",fabricated
+"Image from movie shared as real incident",false_context
+"Headline says study proves coffee harmful without data",false_connection
+"Fake NGO requests donations using copied logo",imposter
+"Humor blog post about aliens taken seriously",satire
+"Coordinated misinformation campaign about elections",astroturfing
+"Influencer promotes product without disclosure",sponsored
+"Claim that magnets cure arthritis spreads online",fabricated
+"Old pandemic chart reused to mislead current trends",false_context
+"Title claims government bans cash without confirmation",false_connection
+"Fake scholarship email asks for personal details",imposter
+"Satirical article about robots ruling world misunderstood",satire
+"Mass fake shares boost misleading health tip",astroturfing
+"Sponsored travel blog praising hotel without disclosure",sponsored
+"Claim that sun exposure cures viral infections",fabricated
+"Old flood footage reused in unrelated region",false_context
+"Misleading title exaggerates crime statistics",false_connection
+"Fake job portal collects applicant data",imposter
+"Parody political speech taken as real",satire
+"Coordinated accounts spread false rumors",astroturfing
+"Brand-funded research presented as neutral study",sponsored
+"Claim that eating ice cream boosts immunity",fabricated
+"Old election video reused to mislead voters",false_context
+"Headline distorts scientific findings",false_connection
+"Fake charity campaign using celebrity name",imposter
+"Satirical meme about economy mistaken as real",satire
+"Bots inflate engagement on misleading posts",astroturfing
+"Sponsored fitness article hides advertisement intent",sponsored
+"Claim that herbal oil cures cancer",fabricated
+"Old earthquake image reused as recent event",false_context
+"Headline suggests false cause-effect relationship",false_connection
+"Fake courier message asking payment details",imposter
+"Comedy article about space travel misread as fact",satire
+"Organized fake discussion forums spread misinformation",astroturfing
+"Sponsored skincare article lacking disclosure",sponsored
+"Claim that saltwater injections cure disease",fabricated
+"Old riot footage reshared with new caption",false_context
+"Misleading news title about inflation",false_connection
+"Fake university admission offer scam",imposter
+"Satirical cartoon interpreted literally",satire
+"Coordinated fake ratings for political pages",astroturfing
+"Paid article promoting app without transparency",sponsored
+"Claim that onions cure viral infection",fabricated
+"Old bridge collapse image reused",false_context
+"Headline misleads about employment data",false_connection
+"Fake lottery message impersonating company",imposter
+"Satirical headline about time travel misunderstood",satire
+"Coordinated fake campaigns to influence markets",astroturfing
+"Sponsored food blog promoting brand secretly",sponsored
+"Claim that sleeping cures all illnesses",fabricated
+"Old protest reused with false narrative",false_context
+"Misleading headline about education policy",false_connection
+"Fake tech support scam using brand name",imposter
+"Satirical article about AI takeover misread",satire
+"Coordinated posting spreads conspiracy theory",astroturfing
+"Sponsored article about insurance disguised as advice",sponsored
+"Claim that bananas cure diabetes",fabricated
+"Old military video reused as new conflict",false_context
+"Headline exaggerates healthcare crisis",false_connection
+"Fake airline ticket scam website",imposter
+"Satirical political analysis taken seriously",satire
+"Mass fake engagement promotes misinformation",astroturfing
+"Sponsored content promoting gadget without disclosure",sponsored
+"Claim that milk cures infections",fabricated
+"Old accident footage reused",false_context
+"Misleading headline about technology breakthrough",false_connection
+"Fake banking alert message phishing users",imposter
+"Satirical post about climate hoax misunderstood",satire
+"Coordinated effort spreads false rumors online",astroturfing
+"Sponsored education article promoting institute",sponsored
+"Claim that breathing techniques cure cancer",fabricated
+"Old cyclone image reused falsely",false_context
+"Headline misrepresents scientific report",false_connection
+"Fake online sale impersonating brand",imposter
+"Satirical blog about aliens misinterpreted",satire
+"Bot networks amplify misleading news",astroturfing
+"Sponsored news piece promoting company",sponsored
+"Claim that honey cures viral infections",fabricated
+"Old video reused to mislead public",false_context
+"Misleading headline about policy decisions",false_connection
+"Fake tax notice requesting payment",imposter
+"Satirical commentary taken literally",satire
+"Coordinated spam posts influence opinions",astroturfing
+"Sponsored article promoting finance product",sponsored
+"Claim that turmeric cures all diseases",fabricated
+"Old hospital image reused",false_context
+"Headline exaggerates economic growth",false_connection
+"Fake online contest asking personal info",imposter
+"Satirical political meme misunderstood",satire
+"Organized fake campaigns manipulate discourse",astroturfing
+"Sponsored blog promoting clothing brand",sponsored
+"Claim that fasting cures chronic illness",fabricated
+"Old traffic incident reused",false_context
+"Misleading headline about crime rates",false_connection
+"Fake government message spreads panic",imposter
+"Satirical science article misread as fact",satire
+"Bot activity spreads misinformation widely",astroturfing
+"Sponsored article about apps disguised as review",sponsored
