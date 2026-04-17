@@ -4,13 +4,13 @@ uvicorn[standard]==0.34.0
 pydantic==2.11.3
 
 # ML/ Data
-transformers==4.40.0
+transformers
 torch
 sentence-transformers
-datasets==2.19.0
+datasets
 numpy
 pandas
-requests==2.31.0
+requests
 pillow
 
 openai
