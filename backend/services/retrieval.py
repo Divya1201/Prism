@@ -32,7 +32,7 @@ def fetch_wikipedia(query: str, top_k: int = 2):
         response = requests.get(search_url, params=params, timeout=5)
         data = response.json()
 
-        for item in data.get("query", {}).get("search", [])[:top_k]:
+        for i, item in enumerate(data.get("query", {}).get("search", [])[:top_k]):
             title = item["title"]
 
             summary_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
@@ -44,7 +44,7 @@ def fetch_wikipedia(query: str, top_k: int = 2):
                 results.append({
                     "text": summary_data.get("extract", ""),
                     "source": f"https://en.wikipedia.org/wiki/{title}",
-                    "score": 0.9,
+                    "score": round(1 / (i + 1), 2),
                 })
 
     except Exception:
@@ -74,11 +74,11 @@ def fetch_news(query: str, top_k: int = 2):
         response = requests.get(url, params=params, timeout=5)
         data = response.json()
 
-        for article in data.get("articles", []):
+        for i, item in enumerate(data.get("organic_results", [])[:top_k]):
             results.append({
                 "text": article.get("title", ""),
                 "source": article.get("url", ""),
-                "score": 0.8,
+                "score": round(1 / (i + 1), 2),
             })
 
     except Exception:
@@ -107,11 +107,11 @@ def fetch_serp(query: str, top_k: int = 2):
         response = requests.get(url, params=params, timeout=5)
         data = response.json()
 
-        for item in data.get("organic_results", [])[:top_k]:
+        for i, item in enumerate(data.get("organic_results", [])[:top_k]):
             results.append({
                 "text": item.get("title", ""),
                 "source": item.get("link", ""),
-                "score": 0.85,
+                "score": round(1 / (i + 1), 2),
             })
 
     except Exception:
@@ -153,4 +153,8 @@ def retrieve_evidence(query: str, top_k: int = 5):
             ]
         }
 
+    # Sort by score (highest first)
+    evidence = sorted(evidence, key=lambda x: x["score"], reverse=True)
+
+    # Take top_k best results
     return {"evidence": evidence[:top_k]}
