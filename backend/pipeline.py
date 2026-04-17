@@ -17,13 +17,13 @@ class AnalysisPipeline:
         if title and len(title) > 10:
             return f"{title} news"
 
-    sentences = text.split(".")
-    for s in sentences:
-        s = s.strip()
-        if len(s) > 40:
-            return f"{s} news"
+        sentences = text.split(".")
+        for s in sentences:
+            s = s.strip()
+            if len(s) > 40:
+                return f"{s} news"
 
-    return text[:120]
+        return text[:120]
     
     def run(
         self,
