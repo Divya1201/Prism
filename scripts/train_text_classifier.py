@@ -16,6 +16,18 @@ from transformers import (
     TrainingArguments,
 )
 
+label_map = {
+    "fabricated": 0,
+    "satire": 1,
+    "false_context": 2,
+    "false_connection": 3,
+    "imposter": 4,
+    "manipulated": 5,
+    "astroturfing": 6,
+    "sponsored": 7,
+    "unknown": 8,
+}
+
 MODEL_NAME = "distilbert-base-uncased"
 
 
