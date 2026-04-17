@@ -389,3 +389,93 @@ text,label
 "Satirical science article misread as fact",satire
 "Bot activity spreads misinformation widely",astroturfing
 "Sponsored article about apps disguised as review",sponsored
+"Breaking: Government approves new education policy reforms",unknown
+"WHO releases updated health guidelines for viral infections",unknown
+"NASA launches new satellite to monitor climate change",unknown
+"Reserve Bank announces new digital currency pilot",unknown
+"Election commission schedules voting dates for upcoming elections",unknown
+"Study shows balanced diet improves long-term health",unknown
+"Scientists discover new species in deep ocean",unknown
+"Technology companies announce new AI regulations compliance",unknown
+"Global summit discusses economic recovery plans",unknown
+"New infrastructure projects approved by government",unknown
+"Drinking kerosene cures all diseases instantly",fabricated
+"New research proves humans don’t need oxygen to survive",fabricated
+"Vaccines turn people into robots controlled by satellites",fabricated
+"Eating only sugar can cure diabetes permanently",fabricated
+"Scientists confirm immortality pill exists",fabricated
+"Water from specific river cures cancer instantly",fabricated
+"Magic bracelet guarantees 100% immunity from all diseases",fabricated
+"Sleeping 2 hours a week increases lifespan to 200 years",fabricated
+"New device reads minds without any technology",fabricated
+"Alien technology secretly used in hospitals worldwide",fabricated
+"Breaking: Cats officially take over government offices",satire
+"Scientists confirm clouds are made of cotton candy",satire
+"Aliens demand voting rights in upcoming elections",satire
+"Government replaces humans with robots overnight",satire
+"New law allows animals to open bank accounts",satire
+"Study shows laughing increases height by 10 inches",satire
+"Flying cars powered by bananas announced",satire
+"Time travel tickets now available for public",satire
+"People can now breathe underwater without equipment",satire
+"Trees start communicating using smartphones",satire
+"This article about fitness tips is sponsored by XYZ brand",sponsored
+"Top investment advice presented by ABC finance company",sponsored
+"Health benefits of supplement backed by its manufacturer",sponsored
+"Best laptops reviewed by brand partners",sponsored
+"Travel blog funded by hotel chain",sponsored
+"Top skincare products recommended by their own companies",sponsored
+"Financial planning tips sponsored by insurance firm",sponsored
+"Nutrition guide supported by supplement brand",sponsored
+"Tech review sponsored by device manufacturer",sponsored
+"Startup article funded by venture capital firm",sponsored
+"Edited video shows incomplete politician speech",manipulated
+"Image brightness altered to hide important details",manipulated
+"Graph modified to exaggerate statistics",manipulated
+"Audio clip edited to change context of statement",manipulated
+"Video cropped to misrepresent situation",manipulated
+"Partial interview used to create false narrative",manipulated
+"Chart selectively shows data to mislead audience",manipulated
+"Image edited to show fake crowd size",manipulated
+"Footage slowed to distort real actions",manipulated
+"Clip rearranged to create misleading sequence",manipulated
+"Old earthquake footage shared as recent disaster",false_context
+"Previous year’s protest image reused as current",false_context
+"Historic speech shared as breaking news",false_context
+"Old news article presented as current event",false_context
+"Outdated statistics used in new context",false_context
+"Archived image shared with misleading caption",false_context
+"Old pandemic data reused to mislead",false_context
+"Previous accident footage reshared",false_context
+"Old government notice circulated again",false_context
+"Past event video shown as recent incident",false_context
+"Headline claims miracle cure but article discusses diet",false_connection
+"Thumbnail shows disaster but article about politics",false_connection
+"Title exaggerates minor issue",false_connection
+"Headline unrelated to actual article content",false_connection
+"Clickbait title misleading readers",false_connection
+"Image unrelated to news article",false_connection
+"Title suggests false conclusion from study",false_connection
+"Headline misrepresents article findings",false_connection
+"Thumbnail misleading about video content",false_connection
+"Title promises shocking truth but content is generic",false_connection
+"Fake social media account impersonates news agency",imposter
+"Website mimics government portal for fraud",imposter
+"Fake email pretending to be bank alert",imposter
+"Fraud account posing as celebrity",imposter
+"Fake scholarship message asking personal details",imposter
+"Clone website copying official design",imposter
+"Fake job offer scam using company name",imposter
+"Fake NGO collecting donations",imposter
+"Fake government circular spreads misinformation",imposter
+"Fraud message impersonating delivery service",imposter
+"Multiple accounts post same message to simulate support",astroturfing
+"Fake reviews boost product credibility",astroturfing
+"Coordinated campaign trends misleading hashtag",astroturfing
+"Bot accounts amplify political narrative",astroturfing
+"Artificial engagement increases post visibility",astroturfing
+"Fake comments create illusion of consensus",astroturfing
+"Organized effort spreads specific misinformation",astroturfing
+"Coordinated promotion disguised as grassroots movement",astroturfing
+"Mass sharing to influence public opinion",astroturfing
+"Bot network inflates engagement metrics",astroturfing
