@@ -98,7 +98,7 @@ class AnalysisPipeline:
                 image_analysis = {"enabled": False, "error": "Image analysis failed"}
             
         # MERGE iMAGE INSIGHT
-        if image_imageanalysisservice analysis.get("enabled") and image_analysis.get("analysis"):
+        if image_analysis.get("enabled") and image_analysis.get("analysis"):
             final_explanation += f"\n\nImage Insight: {image_analysis['analysis']}"
 
         # 7. FINAL RESPONSE
