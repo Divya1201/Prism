@@ -8,7 +8,7 @@ def preprocess_text(text: str) -> str:
     if not text:
         return ""
 
-    text = text.lower()
+    #text = text.lower()
     text = " ".join(text.split())
 
     return text
