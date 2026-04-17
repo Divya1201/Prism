@@ -1,52 +1,45 @@
-import os
-import requests
-
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-API_URL = "https://api-inference.huggingface.co/models/google/vit-base-patch16-224"
-
-HEADERS = {
-    "Authorization": f"Bearer {HF_TOKEN}"
-}
+from google.cloud import vision
 
 
 class ImageAnalysisService:
+    def __init__(self):
+        self.client = vision.ImageAnnotatorClient()
+
     def analyze_image_url(self, image_url: str) -> dict:
+        if not image_url:
+            return {"enabled": False}
 
         try:
-            response = requests.post(
-                API_URL,
-                headers=HEADERS,
-                json={"inputs": image_url},
-                timeout=8
-            )
+            image = vision.Image()
+            image.source.image_uri = image_url
 
-            result = response.json()
+            #  Web detection (KEY FEATURE)
+            web_detection = self.client.web_detection(image=image).web_detection
 
-            # SUCCESS CASE
-            if isinstance(result, list) and len(result) > 0:
+            #  Labels (context)
+            labels = self.client.label_detection(image=image).label_annotations
+            label_names = [label.description for label in labels[:3]]
 
-                # Take top 3 labels instead of 1
-                top_labels = [
-                    item.get("label", "unknown")
-                    for item in result[:3]
-                ]
+            #  Find matching pages (IMPORTANT)
+            matched_pages = []
+            if web_detection.pages_with_matching_images:
+                for page in web_detection.pages_with_matching_images[:3]:
+                    matched_pages.append(page.url)
 
-                top_score = result[0].get("score", 0)
+            #  Interpretation logic
+            if matched_pages:
+                analysis = (
+                    "This image appears across multiple sources online, "
+                    "which may indicate reuse or misleading context."
+                )
+            else:
+                analysis = "No strong evidence of reuse found."
 
-                return {
-                    "enabled": True,
-                    "labels": top_labels,
-                    "confidence": round(top_score, 2),
-                    "analysis": f"Image likely contains: {', '.join(top_labels)}"
-                }
-
-            # Unexpected format
             return {
                 "enabled": True,
-                "labels": [],
-                "confidence": 0.0,
-                "analysis": "Could not interpret image"
+                "labels": label_names,
+                "matched_sources": matched_pages,
+                "analysis": analysis,
             }
 
         except Exception as e:
