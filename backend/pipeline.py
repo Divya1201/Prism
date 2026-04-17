@@ -12,7 +12,19 @@ class AnalysisPipeline:
     def __init__(self):
         self.explainer = ExplainerService()
         self.image_service = ImageAnalysisService()
-        
+
+    def build_query(text: str, title: str | None):
+        if title and len(title) > 10:
+            return f"{title} news"
+
+    sentences = text.split(".")
+    for s in sentences:
+        s = s.strip()
+        if len(s) > 40:
+            return f"{s} news"
+
+    return text[:120]
+    
     def run(
         self,
         text: str,
@@ -55,7 +67,7 @@ class AnalysisPipeline:
 
         # 3. RETRIEVE EVIDENCE
         
-        query = f"{text[:200]} fact check misinformation"
+        query = self.build_query(text, title)
         retrieval_result = retrieve_evidence(query)
         evidence_list = retrieval_result.get("evidence", [])
 
