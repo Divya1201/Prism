@@ -74,7 +74,7 @@ def fetch_news(query: str, top_k: int = 2):
         response = requests.get(url, params=params, timeout=5)
         data = response.json()
 
-        for i, item in enumerate(data.get("organic_results", [])[:top_k]):
+        for i, article in enumerate(data.get("articles", [])[:top_k]):
             results.append({
                 "text": article.get("title", ""),
                 "source": article.get("url", ""),
