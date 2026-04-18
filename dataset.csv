@@ -531,75 +531,75 @@ text,label
 "Outdated flood photo used to mislead about recent events",false_context
 "Old flood visuals circulated as current emergency situation",false_context
 "Past flood image falsely labeled as recent news coverage",false_context
-"Multiple accounts repeatedly posting the same political message to simulate public support", astroturfing
+"Multiple accounts repeatedly posting the same political message to simulate public support",astroturfing
 "Coordinated users spreading identical slogans to create fake popularity", astroturfing
-"Network of fake profiles amplifying political narratives artificially", astroturfing
-"Organized effort to generate fake positive reviews for a product", astroturfing
-"Group-driven campaign creating artificial hype around a product", astroturfing
-"Mass posting strategy used to falsely boost product reputation", astroturfing
-"Fake profiles interacting to inflate likes and comments", astroturfing
-"Artificial engagement generated through coordinated fake accounts", astroturfing
-"Bot-like accounts increasing visibility through fake interactions", astroturfing
-"Information selectively shown to mislead viewers about the truth", manipulated
-"Partial data used to create a misleading narrative", manipulated
-"Only favorable facts presented while hiding critical details", manipulated
-"Scientific findings misrepresented to support incorrect conclusions", manipulated
-"Research study distorted to justify false claims", manipulated
-"Academic data twisted to mislead readers", manipulated
-"Statistics modified to exaggerate the outcome", manipulated
-"Numbers adjusted to create a false impression", manipulated
-"Data manipulated to inflate perceived impact", manipulated
-"Article omits crucial background information about the event", false_context
-"Important details removed leading to a misleading understanding", false_context
-"Content presented without context causing misinterpretation", false_context
-"Chart edited to falsely represent trends", manipulated
-"Graph altered to give a distorted view of data", manipulated
-"Visual data modified to mislead interpretation", manipulated
-"Consuming salt water claimed to cure viral diseases instantly", fabricated
-"Message spreading that salt water can eliminate infections immediately", fabricated
-"False claim that drinking salt water cures viruses overnight", fabricated
-"Oil application claimed to treat all skin conditions instantly", fabricated
-"Viral post says applying oil heals every skin disease", fabricated
-"Fake advice suggesting oil cures all skin problems overnight", fabricated
-"Sleeping on hard surfaces claimed to extend lifespan drastically", fabricated
-"Rumor that floor sleeping increases life expectancy by decades", fabricated
-"False belief that sleeping on the ground adds years to life", fabricated
-"Aliens reportedly participating in national elections", satire
-"Extraterrestrials announced as candidates in political race", satire
-"Humorous claim that aliens are contesting presidential elections", satire
-"Marine animals granted voting rights in coastal regions", satire
-"Fish officially allowed to vote in elections", satire
-"Satirical claim that aquatic life now has voting privileges", satire
-"Scientists allegedly prove teleportation through meditation", satire
-"Claim that humans can teleport using mental focus", satire
-"Humorous report suggesting meditation enables teleportation", satire
-"Product review funded by company but shown as neutral opinion", sponsored
-"Brand-sponsored content presented as independent review", sponsored
-"Advertisement disguised as unbiased product feedback", sponsored
-"Skincare promotion presented as medical recommendation without disclosure", sponsored
-"Sponsored content misleadingly framed as expert health advice", sponsored
-"Product promotion disguised as genuine medical guidance", sponsored
-"Article praising company but funded by the same organization", sponsored
-"Corporate-funded article presented as independent journalism", sponsored
-"Sponsored business content disguised as objective reporting", sponsored
-"Video playback altered to distort interpretation of events", manipulated
-"Footage slowed down to create misleading impression", manipulated
-"Edited video timing used to misrepresent actions", manipulated
-"Speech clip edited to remove important context", manipulated
-"Segment of speech cut to change its meaning", manipulated
-"Video trimmed to mislead about what was actually said", manipulated
-"Image modified to exaggerate size of gathering", manipulated
-"Photo edited to show larger crowd than reality", manipulated
-"Visual altered to inflate crowd numbers artificially", manipulated
-"Old celebration image falsely shared as recent protest", false_context
-"Archived festival photo misused as current political event", false_context
-"Outdated image circulated as recent demonstration", false_context
-"Historic photo shared as breaking current news", false_context
-"Old image presented as recent incident", false_context
-"Archived event image falsely labeled as new", false_context
-"Past news headline reused to appear as current update", false_context
-"Old headline reshared with misleading timestamp", false_context
-"Outdated news content circulated as fresh information", false_context
+"Network of fake profiles amplifying political narratives artificially",astroturfing
+"Organized effort to generate fake positive reviews for a product",astroturfing
+"Group-driven campaign creating artificial hype around a product",astroturfing
+"Mass posting strategy used to falsely boost product reputation",astroturfing
+"Fake profiles interacting to inflate likes and comments",astroturfing
+"Artificial engagement generated through coordinated fake accounts",astroturfing
+"Bot-like accounts increasing visibility through fake interactions",astroturfing
+"Information selectively shown to mislead viewers about the truth",manipulated
+"Partial data used to create a misleading narrative",manipulated
+"Only favorable facts presented while hiding critical details",manipulated
+"Scientific findings misrepresented to support incorrect conclusions",manipulated
+"Research study distorted to justify false claims",manipulated
+"Academic data twisted to mislead readers",manipulated
+"Statistics modified to exaggerate the outcome",manipulated
+"Numbers adjusted to create a false impression",manipulated
+"Data manipulated to inflate perceived impact",manipulated
+"Article omits crucial background information about the event",false_context
+"Important details removed leading to a misleading understanding",false_context
+"Content presented without context causing misinterpretation",false_context
+"Chart edited to falsely represent trends",manipulated
+"Graph altered to give a distorted view of data",manipulated
+"Visual data modified to mislead interpretation",manipulated
+"Consuming salt water claimed to cure viral diseases instantly",fabricated
+"Message spreading that salt water can eliminate infections immediately",fabricated
+"False claim that drinking salt water cures viruses overnight",fabricated
+"Oil application claimed to treat all skin conditions instantly",fabricated
+"Viral post says applying oil heals every skin disease",fabricated
+"Fake advice suggesting oil cures all skin problems overnight",fabricated
+"Sleeping on hard surfaces claimed to extend lifespan drastically",fabricated
+"Rumor that floor sleeping increases life expectancy by decades",fabricated
+"False belief that sleeping on the ground adds years to life",fabricated
+"Aliens reportedly participating in national elections",satire
+"Extraterrestrials announced as candidates in political race",satire
+"Humorous claim that aliens are contesting presidential elections",satire
+"Marine animals granted voting rights in coastal regions",satire
+"Fish officially allowed to vote in elections",satire
+"Satirical claim that aquatic life now has voting privileges",satire
+"Scientists allegedly prove teleportation through meditation",satire
+"Claim that humans can teleport using mental focus",satire
+"Humorous report suggesting meditation enables teleportation",satire
+"Product review funded by company but shown as neutral opinion",sponsored
+"Brand-sponsored content presented as independent review",sponsored
+"Advertisement disguised as unbiased product feedback",sponsored
+"Skincare promotion presented as medical recommendation without disclosure",sponsored
+"Sponsored content misleadingly framed as expert health advice",sponsored
+"Product promotion disguised as genuine medical guidance",sponsored
+"Article praising company but funded by the same organization",sponsored
+"Corporate-funded article presented as independent journalism",sponsored
+"Sponsored business content disguised as objective reporting",sponsored
+"Video playback altered to distort interpretation of events",manipulated
+"Footage slowed down to create misleading impression",manipulated
+"Edited video timing used to misrepresent actions",manipulated
+"Speech clip edited to remove important context",manipulated
+"Segment of speech cut to change its meaning",manipulated
+"Video trimmed to mislead about what was actually said",manipulated
+"Image modified to exaggerate size of gathering",manipulated
+"Photo edited to show larger crowd than reality",manipulated
+"Visual altered to inflate crowd numbers artificially",manipulated
+"Old celebration image falsely shared as recent protest",false_context
+"Archived festival photo misused as current political event",false_context
+"Outdated image circulated as recent demonstration",false_context
+"Historic photo shared as breaking current news",false_context
+"Old image presented as recent incident",false_context
+"Archived event image falsely labeled as new",false_context
+"Past news headline reused to appear as current update",false_context
+"Old headline reshared with misleading timestamp",false_context
+"Outdated news content circulated as fresh information",false_context
 "Coordinated bot accounts boost misleading content across platforms",astroturfing
 "Automated profiles work together to amplify false narratives",astroturfing
 "Groups of fake users simultaneously promote the same message",astroturfing
@@ -886,50 +886,50 @@ text,label
 "A fake government alert message spreads panic among the public",imposter
 "Fraudulent official-looking communication causes fear among citizens",imposter
 "A deceptive message posing as an authority creates unnecessary alarm",imposter
-"Automated profiles are used to artificially boost visibility of false claims", astroturfing
-"Groups of fake users work together to spread identical misinformation messages", astroturfing
-"Information is selectively edited to distort the original meaning of facts", manipulated
-"Only certain pieces of data are highlighted to create a misleading impression", manipulated
-"Statistics are intentionally altered to support a false conclusion", manipulated
-"Critical context is removed, making the claim appear misleading", false_context
-"Missing background information changes how the statement is interpreted", false_context
-"Content is presented without full context, leading to misunderstanding", false_context
-"Data visualization has been altered to exaggerate trends and differences", manipulated
-"Graphs are modified in a way that misrepresents actual data patterns", manipulated
-"Charts are edited to create a misleading view of the information", manipulated
-"False reports claim vaccines negatively affect fertility", fabricated
-"Misinformation suggests vaccines lead to reproductive problems", fabricated
-"Online rumors falsely link vaccines with infertility issues", fabricated
-"Conspiracy theories claim 5G technology is responsible for spreading COVID", fabricated
-"Misleading posts connect 5G infrastructure to coronavirus transmission", fabricated
-"False narratives suggest 5G networks contribute to pandemic spread", fabricated
-"Claims suggest authorities are hiding evidence of alien encounters", fabricated
-"Online theories allege governments conceal extraterrestrial communication", fabricated
-"Rumors spread that officials are covering up alien contact", fabricated
-"Viral claims promote a single plant as a cure for all diseases", fabricated
-"Misleading posts advertise one herb as a universal treatment", fabricated
-"False health claims suggest a plant can cure multiple illnesses", fabricated
-"Fraudulent scheme uses celebrity identity to promote fake investments", imposter
-"Scammers impersonate public figures to advertise financial fraud", imposter
-"Fake endorsements from celebrities are used to deceive investors", imposter
-"Old footage of protests is falsely presented as a recent incident", false_context
-"Archived videos are misleadingly shared as current protest events", false_context
-"Outdated protest clips are reused to depict new developments", false_context
-"Headline exaggerates claims not supported by the article content", false_connection
-"Title misleads readers by not matching the actual story", false_connection
-"Clickbait headline creates expectations not fulfilled in the article", false_connection
-"Satirical article is wrongly interpreted as factual reporting", satire
-"Humorous news piece is mistaken for real information", satire
-"Parody content is shared as if it were genuine news", satire
-"Fake users collaborate to post identical positive product feedback", astroturfing
-"Coordinated accounts generate artificial reviews to boost credibility", astroturfing
-"Multiple fake profiles post repeated reviews to influence perception", astroturfing
-"Branded content is presented as neutral journalism without disclosure", sponsored
-"Advertisement is disguised as a regular news article", sponsored
-"Paid promotional material appears as unbiased reporting", sponsored
-"False advice promotes bleach consumption as a medical cure", fabricated
-"Misleading claims suggest bleach can treat infections", fabricated
-"Online misinformation encourages dangerous use of bleach as treatment", fabricated
+"Automated profiles are used to artificially boost visibility of false claims",astroturfing
+"Groups of fake users work together to spread identical misinformation messages",astroturfing
+"Information is selectively edited to distort the original meaning of facts",manipulated
+"Only certain pieces of data are highlighted to create a misleading impression",manipulated
+"Statistics are intentionally altered to support a false conclusion",manipulated
+"Critical context is removed, making the claim appear misleading",false_context
+"Missing background information changes how the statement is interpreted",false_context
+"Content is presented without full context, leading to misunderstanding",false_context
+"Data visualization has been altered to exaggerate trends and differences",manipulated
+"Graphs are modified in a way that misrepresents actual data patterns",manipulated
+"Charts are edited to create a misleading view of the information",manipulated
+"False reports claim vaccines negatively affect fertility",fabricated
+"Misinformation suggests vaccines lead to reproductive problems",fabricated
+"Online rumors falsely link vaccines with infertility issues",fabricated
+"Conspiracy theories claim 5G technology is responsible for spreading COVID",fabricated
+"Misleading posts connect 5G infrastructure to coronavirus transmission",fabricated
+"False narratives suggest 5G networks contribute to pandemic spread",fabricated
+"Claims suggest authorities are hiding evidence of alien encounters",fabricated
+"Online theories allege governments conceal extraterrestrial communication",fabricated
+"Rumors spread that officials are covering up alien contact",fabricated
+"Viral claims promote a single plant as a cure for all diseases",fabricated
+"Misleading posts advertise one herb as a universal treatment",fabricated
+"False health claims suggest a plant can cure multiple illnesses",fabricated
+"Fraudulent scheme uses celebrity identity to promote fake investments",imposter
+"Scammers impersonate public figures to advertise financial fraud",imposter
+"Fake endorsements from celebrities are used to deceive investors",imposter
+"Old footage of protests is falsely presented as a recent incident",false_context
+"Archived videos are misleadingly shared as current protest events",false_context
+"Outdated protest clips are reused to depict new developments",false_context
+"Headline exaggerates claims not supported by the article content",false_connection
+"Title misleads readers by not matching the actual story",false_connection
+"Clickbait headline creates expectations not fulfilled in the article",false_connection
+"Satirical article is wrongly interpreted as factual reporting",satire
+"Humorous news piece is mistaken for real information",satire
+"Parody content is shared as if it were genuine news",satire
+"Fake users collaborate to post identical positive product feedback",astroturfing
+"Coordinated accounts generate artificial reviews to boost credibility",astroturfing
+"Multiple fake profiles post repeated reviews to influence perception",astroturfing
+"Branded content is presented as neutral journalism without disclosure",sponsored
+"Advertisement is disguised as a regular news article",sponsored
+"Paid promotional material appears as unbiased reporting",sponsored
+"False advice promotes bleach consumption as a medical cure",fabricated
+"Misleading claims suggest bleach can treat infections",fabricated
+"Online misinformation encourages dangerous use of bleach as treatment",fabricated
 "Sponsored content exaggerates product benefits and presents them as facts",sponsored
 "Promotional material overstates product advantages while appearing factual",sponsored
 "Advertising content presents inflated product claims as objective information",sponsored
