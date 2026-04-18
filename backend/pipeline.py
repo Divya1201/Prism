@@ -14,16 +14,27 @@ class AnalysisPipeline:
         self.image_service = ImageAnalysisService()
 
     def build_query(self, text: str, title: str | None):
-        if title and len(title) > 10:
-            return f"{title} news"
 
-        sentences = text.split(".")
-        for s in sentences:
-            s = s.strip()
-            if len(s) > 40:
-                return f"{s} news"
+        # 1. Use title if available (best signal)
+        if title:
+            query = title
 
-        return text[:120]
+        else:
+            query = text[:200]
+
+        # 2. Simplify query (important)
+        query = query.lower()
+
+        # remove stop words
+        stop_words = ["the", "is", "and", "of", "to", "in", "a", "on", "for"]
+        words = [w for w in query.split() if w not in stop_words]
+
+        if len(words) > 12:
+            words = words[:12]
+        elif len(words) < 6:
+            words = words[:6]
+
+        return " ".join(words)
     
     def run(
         self,
