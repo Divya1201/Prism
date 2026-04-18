@@ -173,8 +173,8 @@ def retrieve_evidence(query: str, top_k: int = 5):
             ]
         }
 
-    filtered = [e for e in evidence if e["score"] > 0.1]
-    if filtered:                        # to avoid situation when ALL score < 0.1
+    filtered = [e for e in evidence if e["score"] > 0.02]      #0.1
+    if filtered:                        # to avoid situation when ALL score < 0.02
         evidence = filtered                
     
     # Sort by score (highest first)
