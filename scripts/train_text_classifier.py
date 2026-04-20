@@ -47,18 +47,33 @@ def parse_args():
 # -----------------------------
 # Dataset Loader
 # -----------------------------
-def load_dataset(path: Path) -> pd.DataFrame:
-    if path.suffix == ".csv":
-        df = pd.read_csv(path)
-    elif path.suffix == ".json":
-        df = pd.read_json(path)
-    else:
-        raise ValueError("Only CSV or JSON supported")
+def load_fakeddit(path: Path) -> pd.DataFrame:
+    df = pd.read_csv(path, sep='\t')
 
-    if not {"text", "label"}.issubset(df.columns):
-        raise ValueError("Dataset must contain 'text' and 'label'")
+    df = df[['clean_title', '6_way_label']]
+    df = df.dropna()
 
-    return df
+    # Rename
+    df = df.rename(columns={
+        'clean_title': 'text',
+        '6_way_label': 'raw_label'
+    })
+
+    # MAP TO YOUR SYSTEM LABELS
+    mapping = {
+        "true": "not_misinformation",
+        "false": "fabricated",
+        "satire": "satire",
+        "misleading": "false_context",
+        "partially_true": "false_context"
+    }
+
+    df['label'] = df['raw_label'].map(mapping)
+
+    # Drop unmapped
+    df = df.dropna(subset=['label'])
+
+    return df[['text', 'label']]
 
 
 # -----------------------------
@@ -82,7 +97,7 @@ def main():
     set_seed()
 
     args = parse_args()
-    df = load_dataset(args.dataset)
+    df = load_fakeddit(args.dataset)
 
     # Clean data
     df["text"] = df["text"].fillna("").astype(str)
